@@ -1,5 +1,9 @@
 <script>
   import Aside from "../components/Sidebar.svelte"
+  import Fa from 'svelte-fa'
+  import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
+  import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
+
   let filter = "all"
   let transactions = [
     { "amount": 100.00, "store": 'Hot Topic', "date": '10/19/20', "starred": false, "read": false},
@@ -31,11 +35,17 @@
             <tbody>
               {#each transactions as transaction, i}
                 <tr class:is_read="{transaction.read}">
-                  <td> <input type="checkbox" name="" id=""> </td>
-                  <td class="has-text-right is-narrow">${transaction.amount.toFixed(2)}</td>
+                  <td class="is-narrow"><input type="checkbox" name="" id=""></td>
+                  <td class="is-narrow">
+                    {#if transaction.starred}
+                      <Fa icon={solidStar}/>
+                    {:else}
+                      <Fa icon={regularStar}/>
+                    {/if}
+                  </td>
+                  <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
                   <td>{transaction.store}</td>
                   <td>{transaction.date}</td>
-                  <td>{transaction.starred}</td>
                 </tr>
               {/each}
             </tbody>
@@ -55,10 +65,10 @@
     }
   }
   .is-scrollable {
-    overflow-y: scroll;
+    overflow-y: auto;
   }
   .table-container {
-    max-height: 75vh;
+    max-height: calc(85vh - 105px);
   }
   
 </style>

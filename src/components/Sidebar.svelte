@@ -10,7 +10,9 @@
     <li><button type="button" class="button-link" on:click={() => filter = "starred"}>Starred</button></li>
   </ul>
 
-  <p class="menu-label is-hidden-touch" style="margin-top: 3em">Accounts</p>
+  <p class="menu-label is-hidden-touch" style="margin-top: 3em">
+    Accounts
+  </p>
   <ul class="menu-list">
     <li>
       <input type="checkbox" name="" id="">
@@ -47,10 +49,5 @@
       box-shadow: none;
     }
 
-    // Remove all padding and height so it's just plain, unpadded text.
-    &.button-text {
-      padding: 0;
-      height: unset;
-    }
   }
 </style>
