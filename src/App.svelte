@@ -26,4 +26,7 @@
   :global(.capitalize) {
     text-transform:capitalize;
   }
+  body {
+    overflow: hidden;
+  }
 </style>
