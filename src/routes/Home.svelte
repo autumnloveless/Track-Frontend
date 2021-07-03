@@ -22,7 +22,7 @@
 
 <section class="main-content columns is-fullheight">
   <Aside bind:filter={filter}/>
-  <div class="column is-10 section">
+  <div class="column is-9 section">
     <div class="card">
       <div class="card-header capitalize"><p class="card-header-title">{filter}</p></div>
       <div class="card-content" style="padding: 0; padding-top: 5px;">
