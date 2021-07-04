@@ -3,6 +3,12 @@
   import Fa from 'svelte-fa'
   import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
   import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
+  import { onMount } from "svelte";
+  import api from '../services/apiService.js';
+
+  onMount(async () => {
+    await api.getTransactions();
+  })
 
   let filter = "all"
   let transactions = [
