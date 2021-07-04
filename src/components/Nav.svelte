@@ -1,3 +1,16 @@
+<script>
+  import { refreshToken, getUser } from '../services/authService.js'
+  const refresh = async (e) => {
+    let result = await refreshToken();
+    console.log(result)
+  }
+
+  const user = async (e) => {
+    let result = await getUser();
+    console.log(result)
+  }
+</script>
+
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/#/">
@@ -13,6 +26,8 @@
     </div>
 
     <div class="navbar-end">
+      <a class="navbar-item" on:click={refresh}>Refresh Token</a>
+      <a class="navbar-item" on:click={user}>Get User</a>
       <a class="navbar-item" href="/#/settings">Settings</a>
       <div class="navbar-item">
         <div class="buttons">

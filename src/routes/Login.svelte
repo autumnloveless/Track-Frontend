@@ -9,7 +9,8 @@
         console.log("Logging in...")
         let result = await loginAPI({ 
             email: email,
-            password: password
+            password: password,
+            remember_me: rememberMe
         })
     }
 </script>
