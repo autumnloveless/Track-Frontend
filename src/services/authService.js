@@ -1,10 +1,9 @@
 import { user, accessToken } from "../store";
 import jwt from "jwt-decode";
-import { onDestroy } from 'svelte';
 
 let _accessToken, _user;
-let accessUnsubscribe = accessToken.subscribe((a) => { _accessToken = a })
-let userUnsubscribe = user.subscribe((u) => { _user = u })
+accessToken.subscribe((a) => { _accessToken = a })
+user.subscribe((u) => { _user = u })
 
 const checkAuth = async () => {
     if(!_accessToken) {
@@ -13,7 +12,7 @@ const checkAuth = async () => {
     let decoded = jwt(_accessToken);
     let expired = Date.now() >= decoded.exp * 1000
     if (expired) { await refreshToken(); }
-    return;
+    return { accessToken: _accessToken, user: _user };
 }
 
 const login = async (user_login) => {
@@ -90,7 +89,7 @@ const register = async(user_info) => {
 
 const getUser = async() => {
 
-    let response = await fetch('http://localhost:3300/api/users/d32a7ce7-a025-4eb4-a48e-a13531036a62', {
+    let response = await fetch('http://localhost:3300/api/user', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + _accessToken },
     });
