@@ -3,9 +3,14 @@
   import { onMount } from 'svelte';
   import { user } from '../store.js'
 
+  let menuVisible = false;
   onMount( async () => {
     checkAuth();
   })
+
+  const toggleMenu = () => {
+    menuVisible = !menuVisible;
+  }
 </script>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -14,9 +19,15 @@
       <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="logo" /> -->
       <img src="/logo.png" width="112" alt="logo" />
     </a>
+    <!-- svelte-ignore a11y-missing-attribute -->
+    <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" class:is-active="{menuVisible}" on:click={toggleMenu}>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+      <span aria-hidden="true"></span>
+    </a>
   </div>
 
-  <div id="navbarBasicExample" class="navbar-menu">
+  <div id="navMenu" class:is-active="{menuVisible}" class="navbar-menu">
     <div class="navbar-start">
       <a class="navbar-item" href="/#/app">App</a>
       <a class="navbar-item" href="/#/transaction/10">Transaction</a>
@@ -36,4 +47,5 @@
       </div>
     </div>
   </div>
+
 </nav>
