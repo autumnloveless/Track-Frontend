@@ -1,10 +1,22 @@
 <script>
+  import { onDestroy } from 'svelte';
   import Aside from "../components/Sidebar.svelte"
   import Transactions from "../components/Transactions.svelte"
   import PlaidSetup from "../components/PlaidSetup.svelte"
   import api from '../services/apiService.js';
+  import { user } from '../store.js'
+  import {push} from 'svelte-spa-router'
 
-  let accountPromise = api.getAccounts();
+  let accountPromise
+  let unsubscribe = user.subscribe((u) => { 
+      if(!u.id){
+        push('/login')
+      }else {
+        accountPromise = api.getAccounts();
+      }
+    })
+    onDestroy(unsubscribe);
+
   let filter = "all"
 
 </script>
@@ -17,7 +29,7 @@
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </div>
     {:then accounts}
-      {#if accounts.length > 0}
+      {#if accounts && accounts.length > 0}
         <Transactions filter={filter}/>
       {:else}
         <PlaidSetup/>

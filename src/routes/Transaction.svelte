@@ -1,5 +1,14 @@
 <script>
     export let params = {}
+    import { onDestroy } from 'svelte';
+    import {push} from 'svelte-spa-router'
+    import { user } from '../store.js'
+    let unsubscribe = user.subscribe((u) => { 
+      if(!u.id){
+        push('/login')
+      }  
+    })
+    onDestroy(unsubscribe);
 </script>
 
 

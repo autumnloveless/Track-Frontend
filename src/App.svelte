@@ -25,7 +25,7 @@
 </svelte:head>
 
 <Nav />
-<Router {routes}/>
+<Router {routes} restoreScrollState={true}/>
 
 <style>
   :global(.capitalize) {
