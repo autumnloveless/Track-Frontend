@@ -2,15 +2,15 @@
   export let filter;
 </script>
 
-<aside class="column is-3 is-narrow-mobile section is-hidden-mobile">
-  <p class="menu-label is-hidden-touch">Inbox</p>
+<aside class="column ml-2 is-3 is-narrow-mobile section is-hidden-mobile">
+  <p class="menu-label is-hidden-mobile">Inbox</p>
   <ul class="menu-list">
     <li><button type="button" class="button-link" on:click={() => filter = "all"}>All</button></li>
     <li><button type="button" class="button-link" on:click={() => filter = "unread"}>Unread</button></li>
     <li><button type="button" class="button-link" on:click={() => filter = "starred"}>Starred</button></li>
   </ul>
 
-  <p class="menu-label is-hidden-touch" style="margin-top: 3em">
+  <p class="menu-label is-hidden-mobile" style="margin-top: 3em">
     Accounts
   </p>
   <ul class="menu-list">

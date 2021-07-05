@@ -29,7 +29,7 @@
 
 <section class="main-content columns is-fullheight">
   <Aside bind:filter={filter}/>
-  <div class="column is-9 section">
+  <div class="column is-9-desktop is-8-tablet section">
     {#await accountPromise}
       <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
