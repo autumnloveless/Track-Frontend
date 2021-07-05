@@ -2,9 +2,7 @@
   import Aside from "../components/Sidebar.svelte"
   import Transactions from "../components/Transactions.svelte"
   import PlaidSetup from "../components/PlaidSetup.svelte"
-  import { onMount } from "svelte";
   import api from '../services/apiService.js';
-  import { accounts } from '../store.js'
 
   let accountPromise = api.getAccounts();
 
