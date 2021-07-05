@@ -2,7 +2,7 @@
   export let filter;
 </script>
 
-<aside class="column ml-2 is-3 is-narrow-mobile section is-hidden-mobile">
+<aside class="column ml-2-tablet is-2 is-narrow-mobile section is-hidden-mobile">
   <p class="menu-label is-hidden-mobile">Inbox</p>
   <ul class="menu-list">
     <li><button type="button" class="button-link" on:click={() => filter = "all"}>All</button></li>

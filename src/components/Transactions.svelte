@@ -2,7 +2,10 @@
   import Fa from 'svelte-fa'
   import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
   import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
-  export let filter, transactions;
+  import api from '../services/apiService.js';
+
+  export let filter;
+  let transactionPromise = api.getTransactions();
 </script>
 
 <div class="card">
@@ -11,6 +14,11 @@
     <div class="table-container is-scrollable">
         <table class="table is-hoverable is-fullwidth">
         <tbody>
+          {#await transactionPromise}
+            <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+          {:then transactions}
             {#each transactions as transaction, i}
             <tr class:is_read="{transaction.read}">
                 <td class="is-narrow"><input type="checkbox" name="" id=""></td>
@@ -22,10 +30,14 @@
                 {/if}
                 </td>
                 <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
-                <td>{transaction.store}</td>
-                <td>{transaction.date}</td>
+                <td>{ transaction.merchantName || transaction.name}</td>
+                <td>{new Date(transaction.date).toLocaleString([],{hour: '2-digit', minute:'2-digit'})}</td>
             </tr>
             {/each}
+          {:catch error}
+            <p>There was an error loading your transactions: </p>
+            <p style="color: red">{error.message}</p>
+          {/await}
         </tbody>
         </table>
     </div>

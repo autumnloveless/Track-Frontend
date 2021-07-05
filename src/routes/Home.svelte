@@ -5,38 +5,20 @@
   import api from '../services/apiService.js';
 
   let accountPromise = api.getAccounts();
-
   let filter = "all"
-  let transactions = [
-    { "amount": 100.00, "store": 'Hot Topic', "date": '10/19/20', "starred": false, "read": false},
-    { "amount": 101.53, "store": 'Beach', "date": '10/18/20', "starred": false, "read": false},
-    { "amount": 64.01, "store": 'Target', "date": '10/18/20', "starred": false, "read": true},
-    { "amount": 130.01, "store": 'Walgreens', "date": '10/16/20', "starred": true, "read": true},
-    { "amount": 4.05, "store": 'Old Navy', "date": '10/14/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-    { "amount": 8.65, "store": 'Hot Topic', "date": '10/10/20', "starred": false, "read": true},
-  ]
-  // transactions = [];
+
 </script>
 
 <section class="main-content columns is-fullheight">
   <Aside bind:filter={filter}/>
-  <div class="column is-9-desktop is-8-tablet section">
+  <div class="column is-10 section">
     {#await accountPromise}
       <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
       </div>
     {:then accounts}
       {#if accounts.length > 0}
-        <Transactions transactions={transactions} filter={filter}/>
+        <Transactions filter={filter}/>
       {:else}
         <PlaidSetup/>
       {/if}

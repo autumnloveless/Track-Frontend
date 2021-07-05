@@ -19,7 +19,8 @@ const getTransactions = async () => {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });
-    return response;
+    response = await response.json();
+    return response.transactions || [];
 }
 
 const updateTransactions = async () => {
