@@ -1,14 +1,11 @@
 <script>
-  import { refreshToken, getUser } from '../services/authService.js'
-  const refresh = async (e) => {
-    let result = await refreshToken();
-    console.log(result)
-  }
+  import { logout, checkAuth } from '../services/authService.js'
+  import { onMount } from 'svelte';
+  import { user } from '../store.js'
 
-  const user = async (e) => {
-    let result = await getUser();
-    console.log(result)
-  }
+  onMount( async () => {
+    checkAuth();
+  })
 </script>
 
 <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -26,13 +23,15 @@
     </div>
 
     <div class="navbar-end">
-      <a class="navbar-item" on:click={refresh}>Refresh Token</a>
-      <a class="navbar-item" on:click={user}>Get User</a>
       <a class="navbar-item" href="/#/settings">Settings</a>
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a>
-          <a class="button is-light" href="/#/login">Log in</a>
+          {#if $user.id == undefined}
+            <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a>
+            <a class="button is-light" href="/#/login">Log in</a>
+          {:else}
+            <button class="button is-light" on:click={logout}>Logout</button>
+          {/if}
         </div>
       </div>
     </div>

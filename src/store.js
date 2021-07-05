@@ -1,6 +1,6 @@
 import { writable, derived } from "svelte/store";
 
-export const isAuthenticated = writable(false);
-export const user = writable({});
-export const error = writable();
-export let accessToken = writable()
+export let isAuthenticated = writable(false);
+export let user = writable({});
+export let error = writable();
+export let accessToken = writable();

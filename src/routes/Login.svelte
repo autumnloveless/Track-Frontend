@@ -1,17 +1,30 @@
 <script>
     import Fa from 'svelte-fa'
+    import { onDestroy } from 'svelte';
     import { faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
+    import { user } from "../store";
     import { login as loginAPI } from '../services/authService.js'
-    let email,password = "";
-    let rememberMe = false;
+    import {push} from 'svelte-spa-router'
+    let email= "",password = "";
+    let rememberMe = false, loading = false;
+
+    let unsubscribe = user.subscribe((u) => { 
+      if(u.id){
+        push('/app')
+      }  
+    })
+    onDestroy(unsubscribe);
+
 
     const login = async (e) => {
-        console.log("Logging in...")
+        loading = true;
         let result = await loginAPI({ 
             email: email,
             password: password,
             remember_me: rememberMe
         })
+        loading = false;
+        if (result.success) { push('/app') }
     }
 </script>
 
@@ -46,7 +59,7 @@
                 </label>
               </div>
               <div class="field">
-                <button type="button" on:click={login} class="button is-success">
+                <button type="button" on:click={login} class="button is-success" class:is-loading="{loading}">
                   Login
                 </button>
               </div>
