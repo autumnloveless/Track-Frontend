@@ -32,6 +32,6 @@
     text-transform:capitalize;
   }
   :global(body) {
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 </style>
