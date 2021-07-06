@@ -1,3 +1,8 @@
+<script>
+
+import { push } from "svelte-spa-router";
+
+</script>
 <svelte:head>
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" />
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700" rel="stylesheet" />
@@ -33,7 +38,7 @@
         </div>
         <!--Right Col-->
         <div class="w-full md:w-3/5 py-6 text-center">
-          <img class="w-full md:w-4/5 z-50" src="hero.png" alt="cartoon people using computer" />
+          <img height="" src="hero.svg" alt="cartoon people using computer" />
         </div>
       </div>
     </div>
@@ -71,12 +76,6 @@
             </h3>
             <p class="text-gray-600 mb-8">
               An email style inbox where you can easily view new and read transactions.
-              <br />
-              <br />
-
-              Images from:
-
-              <a class="text-pink-500 underline" href="https://undraw.co/">undraw.co</a>
             </p>
           </div>
           <div class="w-full sm:w-1/2 p-6">
@@ -94,11 +93,6 @@
               </h3>
               <p class="text-gray-600 mb-8">
                 Painlessly organize transactions with stars or custom tags to easily find them later
-                <br />
-                <br />
-                Images from:
-
-                <a class="text-pink-500 underline" href="https://undraw.co/">undraw.co</a>
               </p>
             </div>
           </div>
@@ -138,8 +132,8 @@
       <h3 class="my-4 text-3xl leading-tight">
         Sign up now and see how easy it can be!
       </h3>
-      <a href="/#/signup" class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
+      <button on:click="{() => push('/signup')}" class="mx-auto lg:mx-0 hover:underline bg-white text-gray-800 font-bold rounded-full my-6 py-4 px-8 shadow-lg focus:outline-none focus:shadow-outline transform transition hover:scale-105 duration-300 ease-in-out">
         Sign Up!
-      </a>
+      </button>
     </section>
 </div>
