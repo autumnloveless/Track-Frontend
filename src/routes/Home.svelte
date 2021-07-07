@@ -61,12 +61,6 @@
     padding: 3px;
     flex: 1;
   }
-  .loading-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
 
 
 </style>

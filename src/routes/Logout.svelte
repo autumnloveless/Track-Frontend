@@ -11,3 +11,6 @@
 </script>
 
 Logging Out...
+<div class="loading-container section is-medium">
+  <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+</div>
