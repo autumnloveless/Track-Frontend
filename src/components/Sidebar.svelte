@@ -2,7 +2,7 @@
   export let filter;
 </script>
 
-<aside class="sidebar mt-5 is-narrow-mobile is-hidden-mobile">
+<aside class="sidebar mt-5 is-hidden-mobile">
   <div class="">
     <p class="menu-label is-hidden-mobile">Inbox</p>
     <ul class="menu-list">
