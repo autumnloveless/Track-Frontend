@@ -6,14 +6,18 @@ accessToken.subscribe((a) => { _accessToken = a })
 user.subscribe((u) => { _user = u })
 
 const checkAuth = async () => {
-    if(!_accessToken) {
-        await refreshToken();
+    try {
+        if(!_accessToken) {
+            await refreshToken();
+            return { accessToken: _accessToken, user: _user };
+        }
+        let decoded = jwt(_accessToken);
+        let expired = Date.now() >= decoded.exp * 1000
+        if (expired) { await refreshToken(); }
         return { accessToken: _accessToken, user: _user };
+    } catch (e) {
+        return { accessToken: null, user: null, error: e };
     }
-    let decoded = jwt(_accessToken);
-    let expired = Date.now() >= decoded.exp * 1000
-    if (expired) { await refreshToken(); }
-    return { accessToken: _accessToken, user: _user };
 }
 
 const login = async (user_login) => {

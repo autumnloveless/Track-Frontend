@@ -11,7 +11,7 @@
 
   onMount(async () => {
     let { user } = await checkAuth();
-    if(!user.id){
+    if(!user || !user.id){
       push('/login')
     }else {
       loading = false;

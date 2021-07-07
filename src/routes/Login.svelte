@@ -10,7 +10,7 @@
 
   onMount(async () => {
     let { user } = await checkAuth();
-    if(user.id){ push('/app') }
+    if(user && user.id){ push('/app') }
   })
 
   const login = async (e) => {
