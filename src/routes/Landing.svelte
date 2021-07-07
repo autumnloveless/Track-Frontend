@@ -11,22 +11,25 @@ import { push } from "svelte-spa-router";
     .gradient {
         background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
     }
-    :global(.body) {
-        overflow: auto !important;
+    #main {
+      height: calc(100vh - 56px);
     }
-    :global(#navMenu) {
-        background: none;
+    @media only screen and (max-width: 768px) {
+      .center-on-mobile {
+        margin-left: auto !important;
+        margin-right: auto !important;
+      }
     }
 </style>
 
-<div class="leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
+<div id="main" class="scroll leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">
     <!--Hero-->
     <div class="pt-24">
       <div class="container px-3 mx-auto flex flex-wrap flex-col md:flex-row items-center">
         <!--Left Col-->
         <div class="flex flex-col w-full md:w-2/5 justify-center items-start text-center md:text-left">
           <p class="uppercase tracking-loose w-full">A simpler way to track your spending</p>
-          <h1 class="my-4 text-5xl font-bold leading-tight">
+          <h1 class="my-4 center-on-mobile text-5xl font-bold leading-tight">
             Lumin
           </h1>
           <p class="leading-normal text-2xl mb-8">
@@ -122,7 +125,7 @@ import { push } from "svelte-spa-router";
         </g>
       </g>
     </svg>
-    <section class="container mx-auto text-center py-6 mb-12">
+    <section class="container text-center py-6 pb-12">
       <h1 class="w-full my-2 text-5xl font-bold leading-tight text-center text-white">
         Budget better with Lumin
       </h1>

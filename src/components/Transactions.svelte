@@ -11,7 +11,7 @@
 <div class="card">
     <div class="card-header capitalize"><p class="card-header-title">{filter}</p></div>
     <div class="card-content" style="padding: 0; padding-top: 5px;">
-    <div class="table-container is-scrollable">
+    <div class="table-container">
         <table class="table is-hoverable is-fullwidth">
         <tbody>
           {#await transactionPromise}
@@ -52,12 +52,6 @@
         border: 1px solid #cbcbcb;
         border-width: 0 0 1px;
       }
-    }
-    .is-scrollable {
-      overflow-y: auto;
-    }
-    .table-container {
-      max-height: calc(85vh - 105px);
     }
     
   </style>
