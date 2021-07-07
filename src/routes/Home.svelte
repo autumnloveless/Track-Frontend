@@ -1,5 +1,6 @@
 <script>
-  import { onDestroy, onMount } from 'svelte';
+  import {fade} from 'svelte/transition'
+  import { onMount } from 'svelte';
   import Aside from "../components/Sidebar.svelte"
   import Transactions from "../components/Transactions.svelte"
   import PlaidSetup from "../components/PlaidSetup.svelte"
@@ -23,31 +24,32 @@
 
 </script>
 
-{#if loading}
-  <div class="loading-container section is-medium">
-    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-  </div>
-{:else}
-  <section class="main-content-container">
-    <Aside bind:filter={filter}/>
-    <div class="main-content scroll">
-      {#await accountPromise}
-      <div class="loading-container section is-medium">
-        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-      </div>
-      {:then accounts}
-        {#if accounts && accounts.length > 0}
-          <Transactions filter={filter}/>
-        {:else}
-          <PlaidSetup/>
-        {/if}
-      {:catch error}
-        <p style="color: red">{error.message}</p>
-      {/await}
-    </div> 
-  </section>
-{/if}
-
+<div in:fade="{{duration: 500}}"> 
+  {#if loading}
+    <div class="loading-container section is-medium">
+      <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+    </div>
+  {:else}
+    <section class="main-content-container">
+      <Aside bind:filter={filter}/>
+      <div class="main-content scroll">
+        {#await accountPromise}
+        <div class="loading-container section is-medium">
+          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+        </div>
+        {:then accounts}
+          {#if accounts && accounts.length > 0}
+            <Transactions filter={filter}/>
+          {:else}
+            <PlaidSetup/>
+          {/if}
+        {:catch error}
+          <p style="color: red">{error.message}</p>
+        {/await}
+      </div> 
+    </section>
+  {/if}
+</div>
 
 <style>
   

@@ -28,12 +28,3 @@
 
 <Nav />
 <Router {routes} restoreScrollState={true}/>
-
-<style>
-  :global(.capitalize) {
-    text-transform:capitalize;
-  }
-  :global(body) {
-    /* overflow: hidden; */
-  }
-</style>

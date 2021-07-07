@@ -1,4 +1,5 @@
 <script>
+  import {fade} from 'svelte/transition'
   import Fa from 'svelte-fa'
   import { faLock, faEnvelope, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
   import { register } from '../services/authService.js'
@@ -42,7 +43,7 @@
   }
 </script>
 
-<section class="hero is-primary is-fullheight">
+<section class="hero is-primary is-fullheight" in:fade="{{duration: 500}}">
   <div class="hero-body">
     <div class="container">
       <div class="columns is-centered">

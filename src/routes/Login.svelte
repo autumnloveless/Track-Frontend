@@ -1,4 +1,5 @@
 <script>
+  import {fade} from 'svelte/transition'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
   import Fa from 'svelte-fa'
@@ -25,7 +26,7 @@
   }
 </script>
 
-<section class="hero is-primary is-fullheight">
+<section class="hero is-primary is-fullheight" in:fade="{{duration: 500}}">
   <div class="hero-body">
     <div class="container">
       <div class="columns is-centered">

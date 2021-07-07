@@ -66,6 +66,10 @@ button:focus {
 	border-color: #666;
 }
 
+.capitalize {
+    text-transform:capitalize;
+}
+
 /*  Scroll stuff */
 .scroll {
 	overflow-y: auto !important;

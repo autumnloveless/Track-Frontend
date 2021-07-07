@@ -1,5 +1,7 @@
 <script>
+  import {fade} from 'svelte/transition'
   import api from '../services/apiService.js';
+  import Accounts from '../components/Accounts.svelte'
   import { push, pop } from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
@@ -8,10 +10,12 @@
     let { user } = await checkAuth();
     if(!user || !user.id){ push('/app') }
   })
+
+  let accountPromise = api.getAccounts();
 </script>
 
 
-<section class="main-content-container">
+<section class="main-content-container" in:fade="{{duration: 500}}">
   <aside class="sidebar mt-5 is-hidden-mobile">
     <div>
       <p class="menu-label is-hidden-touch">Return to Inbox</p>
@@ -21,14 +25,29 @@
     </div>
   </aside>
 
-  <div class="main-content">
+  <div class="main-content scroll">
     <div class="card">
       <div class="card-header capitalize"><p class="card-header-title">Settings</p></div>
       <div class="card-content">
         <div class="is-flex is-flex-direction-column is-align-items-center">
           <button class="button is-info m-2" on:click={api.linkBankAccount}>Add Bank Account</button>
           <button class="button is-info m-2" on:click={api.updateTransactions}>Refresh Transactions</button>
-          <hr style="width: 80%"/>
+        </div>
+        <hr>
+        <div>
+          {#await accountPromise}
+            <div class="loading-container section is-medium">
+              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+            </div>
+          {:then accounts}
+            {#if accounts && accounts.length > 0}
+              <Accounts accounts={accounts}/>
+            {:else}
+              You don't currently have any linked accounts. Set one up now.
+            {/if}
+          {:catch error}
+            <p style="color: red">{error.message}</p>
+          {/await}
         </div>
       </div>
     </div>
