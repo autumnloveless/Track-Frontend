@@ -1,13 +1,9 @@
 <script>
     export let params = {}
     import { onDestroy } from 'svelte';
-    import {push} from 'svelte-spa-router'
+    import { push, pop } from 'svelte-spa-router'
     import { user } from '../store.js'
-    let unsubscribe = user.subscribe((u) => { 
-      if(!u.id){
-        push('/login')
-      }  
-    })
+    let unsubscribe = user.subscribe((u) => { if(!u.id){ push('/login') } })
     onDestroy(unsubscribe);
 </script>
 
@@ -16,7 +12,7 @@
     <aside class="column is-3 is-narrow-mobile is-fullheight section is-hidden-mobile">
     <p class="menu-label is-hidden-touch">Return to Inbox</p>
         <ul class="menu-list">
-            <li><a href="/#/app" type="button" class="button">Back</a></li>
+            <li><button on:click={pop} type="button" class="button">Back</button></li>
         </ul>
     </aside>
 

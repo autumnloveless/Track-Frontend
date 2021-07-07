@@ -21,9 +21,9 @@
 
 </script>
 
-<section class="main-content columns is-fullheight">
+<section class="main-content is-flex">
   <Aside bind:filter={filter}/>
-  <div class="column is-10 section scroll">
+  <div class="column container scroll">
     {#await accountPromise}
       <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
         <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
