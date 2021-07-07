@@ -5,6 +5,7 @@
   import Home from "./routes/Home.svelte";
   import Settings from "./routes/Settings.svelte";
   import Login from "./routes/Login.svelte";
+  import Logout from "./routes/Logout.svelte";
   import Signup from "./routes/Signup.svelte"
   import Transaction from "./routes/Transaction.svelte";
   import Nav from "./components/Nav.svelte"
@@ -15,6 +16,7 @@
     '/settings': Settings,
     '/login': Login,
     '/signup': Signup,
+    '/logout': Logout,
     '/transaction/:id': Transaction,
     '*': Home,
   }

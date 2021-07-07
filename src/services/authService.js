@@ -7,7 +7,8 @@ user.subscribe((u) => { _user = u })
 
 const checkAuth = async () => {
     if(!_accessToken) {
-        return await refreshToken();
+        await refreshToken();
+        return { accessToken: _accessToken, user: _user };
     }
     let decoded = jwt(_accessToken);
     let expired = Date.now() >= decoded.exp * 1000
@@ -36,7 +37,8 @@ const login = async (user_login) => {
 }
 
 const logout = async () => {
-    await checkAuth();
+    let {user:userAuth} = await checkAuth();
+    if(!userAuth || !userAuth.id) { return }
     let response = await fetch('http://localhost:3300/api/logout', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + _accessToken },

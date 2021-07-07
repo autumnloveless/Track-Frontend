@@ -2,7 +2,7 @@
   export let filter;
 </script>
 
-<aside class="sidebar mt-5 is-narrow-mobile container is-hidden-mobile is-flex is-justify-content-center">
+<aside class="sidebar mt-5 is-narrow-mobile is-hidden-mobile">
   <div class="">
     <p class="menu-label is-hidden-mobile">Inbox</p>
     <ul class="menu-list">
@@ -33,6 +33,8 @@
 
 <style type="text/scss">
   .sidebar {
+    display: flex;
+    justify-content: center;
     min-width: 160px;
     flex: 0;
   }
@@ -56,4 +58,5 @@
     }
 
   }
+
 </style>
