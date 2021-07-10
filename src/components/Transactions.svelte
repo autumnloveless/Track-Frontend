@@ -1,16 +1,24 @@
 <script>
   import api from '../services/apiService.js';
+  import Fa from 'svelte-fa'
+  import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
   import TransactionRow from './TransactionRow.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
   import { onMount } from 'svelte';
   import collapse from 'svelte-collapse'
   let unreadOpen = true, readOpen = true;
+  let loading = true, refresh = false;
   // export let filter;
   
-  let loading = true;
   let transactions=[],unreadTransactions=[],readTransactions=[];
-  onMount(async () => {
+  onMount(async () => await getTransactions())
+
+  const getTransactions = async (isRefresh = false) => {
+    if (isRefresh) { rotateButton() }
+    else { loading = true; }
     transactions = await api.getTransactions();
+    unreadTransactions = [];
+    readTransactions = [];
     transactions.forEach(transaction => {
       if(!transaction.read){
         unreadTransactions.push(transaction);
@@ -19,7 +27,13 @@
       }
     });
     loading = false;
-  })
+  }
+
+  const rotateButton = () => {
+      refresh = false;
+      setTimeout(function() { refresh = true; }, 10);
+  }
+
 </script>
 
 {#if loading}
@@ -27,6 +41,9 @@
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
   </div>
 {:else}
+  <div class="m-2" on:click={() => getTransactions(true)}>
+    <span class="refresh-button" class:rotate-360="{refresh}"><Fa icon={faRedoAlt} /></span>
+  </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
       <p class="card-header-title">Unread</p>
@@ -63,3 +80,19 @@
     </div>
   </div>
 {/if}
+
+<style>
+  .refresh-button {
+    display: block; 
+    width: fit-content;
+  }
+
+  .rotate-360 {
+    animation: rotate-360 cubic-bezier(0.36,-0.52, 0.61, 1.27) 2s;
+  }
+
+  @keyframes rotate-360 {
+    from { transform: rotate(0) }
+    to { transform: rotate(360deg) }
+  }
+</style>
