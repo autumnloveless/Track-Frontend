@@ -74,6 +74,20 @@ button:focus {
 	cursor: pointer;
 }
 
+/* Transactions */
+.is_read {
+	background-color: #f2f2f2;
+}
+
+.is_read td {
+	border: 1px solid #cbcbcb;
+	border-width: 0 0 1px;
+}
+
+.thin-border-bottom {
+	border-bottom: 1px solid #dbdbdb;
+}
+
 /*  Scroll stuff */
 .scroll {
 	overflow-y: scroll !important;
