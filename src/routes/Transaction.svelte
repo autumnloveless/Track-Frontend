@@ -1,5 +1,6 @@
 <script>
   export let params = {}
+  import Unread from '../components/Unread.svelte';
   import Starred from '../components/Starred.svelte';
   import {checkAuth} from '../services/authService.js';
   import api from '../services/apiService.js';
@@ -20,6 +21,12 @@
 
   const toggleStar = async () => {
     let result = await api.updateTransaction(transaction.id, { starred: !transaction.starred });
+    if (result && !result.error) { transaction = result }
+    else { console.log(result.error) }
+  }
+
+  const toggleRead = async () => {
+    let result = await api.updateTransaction(transaction.id, { read: !transaction.read });
     if (result && !result.error) { transaction = result }
     else { console.log(result.error) }
   }
@@ -44,6 +51,7 @@
       <div class="card">
         <div class="card-header capitalize">
           <p class="card-header-title">{transaction.merchantName || transaction.name}</p>
+          <p class="card-header-icon" on:click={toggleRead}><Unread read={transaction.read} /></p>
           <p class="card-header-icon" on:click={toggleStar}><Starred starred={transaction.starred} /></p>
         </div>
         <div class="card-content">
