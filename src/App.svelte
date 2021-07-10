@@ -17,7 +17,7 @@
     '/login': Login,
     '/signup': Signup,
     '/logout': Logout,
-    '/transaction/:id': Transaction,
+    '/transactions/:id': Transaction,
     '*': Home,
   }
 </script>

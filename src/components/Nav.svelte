@@ -16,8 +16,7 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/#/">
-      <!-- <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28" alt="logo" /> -->
-      <img src="/lumin-color.svg" width="112" height="60" alt="logo" />
+      <img src="/lumin-color.svg" width="112" height="28" alt="logo" />
     </a>
     <!-- svelte-ignore a11y-missing-attribute -->
     <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" class:is-active="{menuVisible}" on:click={toggleMenu}>
@@ -30,7 +29,6 @@
   <div id="navMenu" class:is-active="{menuVisible}" class="navbar-menu">
     <div class="navbar-start">
       <a class="navbar-item" href="/#/app">App</a>
-      <a class="navbar-item" href="/#/transaction/10">Transaction</a>
     </div>
 
     <div class="navbar-end">

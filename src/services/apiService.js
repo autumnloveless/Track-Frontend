@@ -23,6 +23,16 @@ const getTransactions = async () => {
     return response.transactions || [];
 }
 
+const getTransaction = async (id) => {
+    let { accessToken, user} = await checkAuth();
+    let response = await fetch('http://localhost:3300/api/transactions/' + id, {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: { 'Authorization': 'Bearer ' + accessToken },
+    });
+    response = await response.json();
+    return response.transaction || [];
+}
+
 const updateTransactions = async () => {
     let { accessToken, user} = await checkAuth();
     let response = await fetch('http://localhost:3300/api/plaid/update_transactions', {
@@ -88,4 +98,4 @@ const setPlaidAccessToken = async(public_token) => {
 }
 
 
-export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,updateTransaction }
+export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,updateTransaction,getTransaction }
