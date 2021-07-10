@@ -36,6 +36,19 @@ const updateTransactions = async () => {
     return response;
 }
 
+const updateTransaction = async (id, body) => {
+    let { accessToken, user} = await checkAuth();
+    let response = await fetch('http://localhost:3300/api/transactions/' + id, {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken,
+        },
+        body: JSON.stringify(body) // body data type must match "Content-Type" header
+    });
+    return response;
+}
+
 const linkBankAccount = async () => {
     // Get link Token
     let { accessToken, user} = await checkAuth();
@@ -74,4 +87,4 @@ const setPlaidAccessToken = async(public_token) => {
 }
 
 
-export default { getAccounts, getTransactions, linkBankAccount, updateTransactions }
+export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,updateTransaction }
