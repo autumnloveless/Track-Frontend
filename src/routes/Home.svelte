@@ -30,24 +30,24 @@
       <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
     </div>
   {:else}
-    <section class="main-content-container">
-      <Aside bind:filter={filter}/>
-      <div class="main-content scroll">
-        {#await accountPromise}
-        <div class="loading-container section is-medium">
-          <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-        </div>
-        {:then accounts}
+    {#await accountPromise}
+      <div class="loading-container section is-medium">
+        <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+      </div>
+    {:then accounts}
+      <section class="main-content-container">
+        <Aside bind:filter={filter} accounts={accounts}/>
+        <div class="main-content scroll">
           {#if accounts && accounts.length > 0}
             <Transactions filter={filter}/>
           {:else}
             <PlaidSetup/>
           {/if}
-        {:catch error}
-          <p style="color: red">{error.message}</p>
-        {/await}
-      </div> 
-    </section>
+        </div> 
+      </section>
+    {:catch error}
+      <p style="color: red">{error.message}</p>
+    {/await}
   {/if}
 </div>
 

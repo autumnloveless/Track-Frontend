@@ -70,9 +70,13 @@ button:focus {
     text-transform:capitalize;
 }
 
+.pointer {
+	cursor: pointer;
+}
+
 /*  Scroll stuff */
 .scroll {
-	overflow-y: auto !important;
+	overflow-y: scroll !important;
 }
 
 html {

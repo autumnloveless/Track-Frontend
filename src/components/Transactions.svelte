@@ -1,48 +1,89 @@
 <script>
   import Fa from 'svelte-fa'
-  import { faStar as solidStar } from '@fortawesome/free-solid-svg-icons'
-  import { faStar as regularStar } from '@fortawesome/free-regular-svg-icons'
+  import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
   import api from '../services/apiService.js';
-
+  import Starred from './Starred.svelte';
+  import { onMount } from 'svelte';
+  import collapse from 'svelte-collapse'
+  let unreadOpen = true, readOpen = true;
   export let filter;
-  let transactionPromise = api.getTransactions();
+  
+  let loading = true;
+  let transactions=[],unreadTransactions=[],readTransactions=[];
+  onMount(async () => {
+    transactions = await api.getTransactions();
+    transactions.forEach(transaction => {
+      if(!transaction.read){
+        unreadTransactions.push(transaction);
+      } else{
+        readTransactions.push(transaction);
+      }
+    });
+    loading = false;
+  })
 </script>
 
-<div class="card">
-    <div class="card-header capitalize"><p class="card-header-title">{filter}</p></div>
-    <div class="card-content" style="padding: 0; padding-top: 5px;">
-    <div class="table-container">
+{#if loading}
+  <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
+    <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
+  </div>
+{:else}
+  <div class="card">
+    <div class="card-header capitalize" on:click={() => unreadOpen = !unreadOpen}>
+      <p class="card-header-title">Unread</p>
+      {#if unreadOpen}
+      <p class="card-header-icon"><Fa icon={faAngleUp}/></p>
+      {:else}
+      <p class="card-header-icon"><Fa icon={faAngleDown}/></p>
+      {/if}
+    </div>
+    <div class="card-content" class:pt-2="{unreadOpen}" style="padding: 0" use:collapse={{open: unreadOpen, duration: 0.6}}>
+      <div class="table-container">
         <table class="table is-hoverable is-fullwidth">
-        <tbody>
-          {#await transactionPromise}
-            <div class="section is-medium is-flex is-justify-content-center is-align-items-center">
-              <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
-            </div>
-          {:then transactions}
-            {#each transactions as transaction, i}
-            <tr class:is_read="{transaction.read}">
-                <td class="is-narrow"><input type="checkbox" name="" id=""></td>
-                <td class="is-narrow">
-                {#if transaction.starred}
-                    <Fa icon={solidStar}/>
-                {:else}
-                    <Fa icon={regularStar}/>
-                {/if}
-                </td>
-                <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
-                <td>{ transaction.merchantName || transaction.name}</td>
-                <td>{new Date(transaction.date).toLocaleString([],{hour: '2-digit', minute:'2-digit'})}</td>
-            </tr>
+          <tbody>
+            {#each unreadTransactions as transaction, i}
+              <tr class:is_read="{transaction.read}">
+                  <td class="is-narrow"><input type="checkbox" name="" id=""></td>
+                  <td class="is-narrow"><Starred starred={transaction.starred}/></td>
+                  <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
+                  <td>{ transaction.merchantName || transaction.name}</td>
+                  <td>{new Date(transaction.date).toLocaleString([],{hour: '2-digit', minute:'2-digit'})}</td>
+              </tr>
             {/each}
-          {:catch error}
-            <p>There was an error loading your transactions: </p>
-            <p style="color: red">{error.message}</p>
-          {/await}
-        </tbody>
+          </tbody>
         </table>
+      </div>
     </div>
+  </div>
+
+  <div class="card mt-5">
+    <div class="card-header capitalize" on:click={() => readOpen = !readOpen}>
+      <p class="card-header-title">Read</p>
+      {#if readOpen}
+      <p class="card-header-icon"><Fa icon={faAngleUp}/></p>
+      {:else}
+      <p class="card-header-icon"><Fa icon={faAngleDown}/></p>
+      {/if}
     </div>
-</div>
+    <div class="card-content" class:pt-2="{readOpen}" style="padding: 0;" use:collapse={{open: readOpen, duration: 0.6}}>
+      <div class="table-container">
+        <table class="table is-hoverable is-fullwidth">
+          <tbody>
+            {#each readTransactions as transaction, i}
+              <tr class:is_read="{transaction.read}">
+                  <td class="is-narrow"><input type="checkbox" name="" id=""></td>
+                  <td class="is-narrow"><Starred starred={transaction.starred}/></td>
+                  <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
+                  <td>{ transaction.merchantName || transaction.name}</td>
+                  <td>{new Date(transaction.date).toLocaleString([],{hour: '2-digit', minute:'2-digit'})}</td>
+              </tr>
+            {/each}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+{/if}
 
 
 <style lang="scss">
