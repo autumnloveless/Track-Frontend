@@ -31,7 +31,7 @@ const updateTransactions = async () => {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + accessToken,
         },
-        body: JSON.stringify({ item_id: 'DgVzzg8G3jCxRV74NAbZi1a1DZmBj1U36wvj3'}) // body data type must match "Content-Type" header
+        body: JSON.stringify({ item_id: 'LD8B4LeA4vcAxnp16eqKS5DMANdNmVtkERwV1'}) // body data type must match "Content-Type" header
     });
     return response;
 }
@@ -46,7 +46,8 @@ const updateTransaction = async (id, body) => {
         },
         body: JSON.stringify(body) // body data type must match "Content-Type" header
     });
-    return response;
+    response = await response.json();
+    return response.transaction || response.error;
 }
 
 const linkBankAccount = async () => {

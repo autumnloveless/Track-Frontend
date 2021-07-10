@@ -4,7 +4,9 @@
   export let transaction;
 
   const toggleStar = async () => {
-    transaction = await api.updateTransaction(transaction.id, { starred: !transaction.starred });
+    let result = await api.updateTransaction(transaction.id, { starred: !transaction.starred });
+    if (result && !result.error) { transaction = result }
+    else { console.log(result.error) }
   }
 </script>
 
@@ -13,5 +15,5 @@
   <td class="is-narrow" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
   <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
   <td>{ transaction.merchantName || transaction.name}</td>
-  <td>{new Date(transaction.date).toLocaleString([],{hour: '2-digit', minute:'2-digit'})}</td>
+  <td>{new Date(transaction.date).toLocaleString()}</td>
 </tr>
