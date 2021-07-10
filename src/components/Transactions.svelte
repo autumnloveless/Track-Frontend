@@ -42,7 +42,7 @@
   </div>
 {:else}
   <div class="m-2" on:click={() => getTransactions(true)}>
-    <span class="refresh-button" class:rotate-360="{refresh}"><Fa icon={faRedoAlt} /></span>
+    <span class="refresh-button" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
   </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
@@ -87,12 +87,12 @@
     width: fit-content;
   }
 
-  .rotate-360 {
-    animation: rotate-360 cubic-bezier(0.36,-0.52, 0.61, 1.27) 2s;
+  .rotate-720 {
+    animation: rotate-720 cubic-bezier(0.23,-0.41, 0.69, 1.41) 3s;
   }
 
-  @keyframes rotate-360 {
+  @keyframes rotate-720 {
     from { transform: rotate(0) }
-    to { transform: rotate(360deg) }
+    to { transform: rotate(720deg) }
   }
 </style>
