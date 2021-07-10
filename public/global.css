@@ -74,6 +74,18 @@ button:focus {
 	cursor: pointer;
 }
 
+/* Main Layout */
+.main-content-container {
+	display: flex;
+	padding: 10px;
+	height: calc(100vh - 56px);
+}
+
+.main-content {
+	padding: 3px;
+	flex: 1;
+}
+
 /* Transactions */
 .is_read {
 	background-color: #f2f2f2;

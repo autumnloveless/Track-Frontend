@@ -53,16 +53,6 @@
 
 <style>
   
-  .main-content-container {
-    display: flex;
-    padding: 10px;
-    height: calc(100vh - 56px);
-  }
-
-  .main-content {
-    padding: 3px;
-    flex: 1;
-  }
 
 
 </style>

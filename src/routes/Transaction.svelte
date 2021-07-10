@@ -8,15 +8,17 @@
 </script>
 
 
-<section class="main-content columns is-fullheight">
-    <aside class="column is-3 is-narrow-mobile is-fullheight section is-hidden-mobile">
-    <p class="menu-label is-hidden-touch">Return to Inbox</p>
+<section class="main-content-container">
+    <aside class="sidebar mt-5 ml-2 is-hidden-mobile scroll">
+      <div>
+        <p class="menu-label is-hidden-mobile">Return to Inbox</p>
         <ul class="menu-list">
             <li><button on:click={pop} type="button" class="button">Back</button></li>
         </ul>
+      </div>
     </aside>
 
-    <div class="column is-9 section">
+    <div class="main-content scroll">
       <div class="card">
         <div class="card-header capitalize"><p class="card-header-title">Transaction {params.id}</p></div>
         <div class="card-content">
