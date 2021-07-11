@@ -41,6 +41,18 @@ const login = async (user_login) => {
     return response;
 }
 
+const forgotPassword = async (user_login) => {
+    let response = await fetch(process.env.API_URL + 'api/auth/forgotPassword', {
+        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        // credentials: 'include', // include, *same-origin, omit
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user_login) // body data type must match "Content-Type" header
+    });
+    response = await response.json()
+    if(!response.success) { return response.error }
+    return response;
+}
+
 const logout = async () => {
     let {user:userAuth} = await checkAuth();
     if(!userAuth || !userAuth.id) { return }
@@ -109,4 +121,4 @@ const getUser = async() => {
     return response; // parses JSON response into native JavaScript objects
 }
 
-export { login, register, logout, refreshToken, getUser, checkAuth };
+export { login, register, logout, refreshToken, getUser, checkAuth, forgotPassword };

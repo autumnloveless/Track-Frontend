@@ -56,11 +56,11 @@
                 Remember me
               </label>
             </div>
-            <div class="field is-flex is-align-items-center is-justify-content-space-between">
+            <div class="field">
               <button type="button" on:click={login} class="button is-success" class:is-loading="{loading}">
                 Login
               </button>
-              <a href="/#/forgot_password" class="ml-3" style="color: #555" class:is-loading="{loading}">
+              <a href="/#/forgot_password" class="button is-success" class:is-loading="{loading}">
                 Forgot Password
               </a>
             </div>

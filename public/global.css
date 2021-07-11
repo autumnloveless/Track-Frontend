@@ -100,6 +100,13 @@ button:focus {
 	color: green;
 }
 
+/* Toast styles */
+:root {
+    --toastBackground: rgba(255,255,255,0.95);
+    --toastColor: #424242;
+    --toastProgressBackground: aquamarine;
+  }
+
 /* Main Layout */
 .main-content-container {
 	display: flex;

@@ -7,8 +7,11 @@
   import Login from "./routes/Login.svelte";
   import Logout from "./routes/Logout.svelte";
   import Signup from "./routes/Signup.svelte"
+  import ForgotPassword from "./routes/ForgotPassword.svelte"
+  import ResetPassword from "./routes/ResetPassword.svelte"
   import Transaction from "./routes/Transaction.svelte";
   import Nav from "./components/Nav.svelte"
+  import { SvelteToast } from '@zerodevx/svelte-toast'
 
   const routes = {
     '/': Landing,
@@ -17,6 +20,8 @@
     '/login': Login,
     '/signup': Signup,
     '/logout': Logout,
+    '/forgot_password': ForgotPassword,
+    '/reset_password': ResetPassword,
     '/transactions/:id': Transaction,
     '*': Home,
   }
@@ -28,3 +33,4 @@
 
 <Nav />
 <Router {routes} restoreScrollState={true}/>
+<SvelteToast />
