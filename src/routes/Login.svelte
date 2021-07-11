@@ -5,13 +5,13 @@
   import Fa from 'svelte-fa'
   import { faLock, faEnvelope } from '@fortawesome/free-solid-svg-icons'
   import { login as loginAPI } from '../services/authService.js'
-  import {push} from 'svelte-spa-router'
+  import {push,replace} from 'svelte-spa-router'
   let email= "",password = "";
   let rememberMe = true, loading = false;
 
   onMount(async () => {
     let { user } = await checkAuth();
-    if(user && user.id){ push('/app') }
+    if(user && user.id){ replace('/app') }
   })
 
   const login = async (e) => {

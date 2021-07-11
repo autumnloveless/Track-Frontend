@@ -6,14 +6,14 @@
   import PlaidSetup from "../components/PlaidSetup.svelte"
   import api from '../services/apiService.js';
   import {checkAuth} from '../services/authService.js';
-  import { push } from 'svelte-spa-router';
+  import { push,replace } from 'svelte-spa-router';
 
   let accountPromise, loading=true
 
   onMount(async () => {
     let { user } = await checkAuth();
     if(!user || !user.id){
-      push('/login')
+      replace('/login')
     }else {
       loading = false;
       accountPromise = api.getAccounts();

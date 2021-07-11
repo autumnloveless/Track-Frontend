@@ -2,13 +2,13 @@
   import {fade} from 'svelte/transition'
   import api from '../services/apiService.js';
   import Accounts from '../components/Accounts.svelte'
-  import { push, pop } from 'svelte-spa-router'
+  import { push, pop,replace } from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
 
   onMount(async () => {
     let { user } = await checkAuth();
-    if(!user || !user.id){ push('/app') }
+    if(!user || !user.id){ replace('/app') }
   })
 
   let accountPromise = api.getAccounts();

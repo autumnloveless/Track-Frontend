@@ -27,9 +27,9 @@
     "svelte": "^3.0.0",
     "svelte-fa": "^2.2.1",
     "svelte-preprocess": "^4.7.3",
-    "svelte-spa-router": "^3.2.0"
-  },
-  "dependencies": {
+    "svelte-spa-router": "^3.2.0",
     "svelte-collapse": "^0.0.4"
+},
+  "dependencies": {
   }
 }

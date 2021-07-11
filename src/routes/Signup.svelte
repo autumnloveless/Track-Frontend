@@ -3,13 +3,13 @@
   import Fa from 'svelte-fa'
   import { faLock, faEnvelope, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
   import { register } from '../services/authService.js'
-  import {push} from 'svelte-spa-router'
+  import {push,replace} from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
 
   onMount(async () => {
     let { user } = await checkAuth();
-    if(user && user.id){ push('/app') }
+    if(user && user.id){ replace('/app') }
   })
 
   let strength = 0;
