@@ -89,7 +89,7 @@
   </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
-      <p class="card-header-title">Unread</p>
+      <p class="card-header-title">Unread ({unreadTransactions.length})</p>
       <CollapseIcon open={unreadOpen} />
     </div>
     <div class="card-content p-0" use:collapse={{open: unreadOpen, duration: 0.6}}>
@@ -107,7 +107,7 @@
 
   <div class="card mt-5">
     <div class="card-header capitalize thin-border-bottom" on:click={() => readOpen = !readOpen}>
-      <p class="card-header-title">Read</p>
+      <p class="card-header-title">Read ({readTransactions.length})</p>
       <CollapseIcon open={readOpen} />
     </div>
     <div class="card-content p-0" use:collapse={{open: readOpen, duration: 0.6}}>

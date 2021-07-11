@@ -4,6 +4,10 @@
   import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   let open = true;
+  let selectedAccounts = [];
+  const selectAccount = () => {
+    selectedAccounts = selectedAccounts.length > 0 ? [] : accounts.map(a => a.accountId);
+  }
 </script>
 
 <aside class="sidebar mt-5 ml-2 is-hidden-mobile scroll" >
@@ -15,8 +19,8 @@
     </ul>
 
     <p class="pointer menu-label is-hidden-mobile is-flex is-align-items-center" style="margin-top: 3em" on:click={() => open = !open}>
-      <input type="checkbox" on:click|stopPropagation={() => {}}>
-      <span class="mx-3">Accounts</span>
+      <input type="checkbox" on:click|stopPropagation={selectAccount} checked={selectedAccounts.length > 0}>
+      <span class="mx-3">Accounts ({selectedAccounts.length})</span>
       {#if open}
         <span class=""><Fa icon={faAngleUp}/></span>
       {:else}
@@ -26,7 +30,7 @@
     <ul class="menu-list" use:collapse={{open, duration: 0.6}}>
       {#each accounts as account, i}
         <li>
-          <input type="checkbox" name="" id="">
+          <input type="checkbox" bind:group={selectedAccounts} value={account.accountId}>
           <button type="button" class="button-link">{account.name}</button>
         </li>
       {/each}

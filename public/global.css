@@ -92,6 +92,10 @@ button:focus {
 	box-shadow: none;
 }
 
+.border-none {
+	border: none !important;
+}
+
 /* Main Layout */
 .main-content-container {
 	display: flex;
