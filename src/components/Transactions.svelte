@@ -6,20 +6,20 @@
   import Multiselect from './Multiselect.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
   import Unread from '../components/Unread.svelte';
-  import { onMount } from 'svelte';
+  import { onMount, onDestroy } from 'svelte';
   import { selectedTransactions } from '../store.js';
   import collapse from 'svelte-collapse'
   let unreadOpen = true, readOpen = true;
   let loading = true, refresh = false;
   let selected = [], selectedUnread = false;
-  selectedTransactions.subscribe((s) => { 
+  let unsubscribe = selectedTransactions.subscribe((s) => { 
     selected = s;
   });
+  onDestroy(() => unsubscribe())
 
   $: { 
     selectedTransactions.set(selected)
     selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
-    console.log(selected)
   }
 
   export let filter, selectedAccounts;
@@ -62,22 +62,22 @@
   const handleMultiselectButton = async (event) => {
     switch(event.detail.option) {
       case "all":
-        selectedTransactions.set(transactions.map(t => { t.id, t.read }))
+        selected = transactions.map(t => ({ id: t.id, read: t.read }))
         break;
       case "none":
-        selectedTransactions.set([])
+        selected = []
         break;
       case "unread":
-        selectedTransactions.set(transactions.filter(t => !t.read).map(t => { t.id, t.read }))
+        selected = transactions.filter(t => !t.read).map(t =>  ({ id: t.id, read: t.read }))
         break;
       case "read":
-        selectedTransactions.set(transactions.filter(t => t.read).map(t => { t.id, t.read }))
+        selected = transactions.filter(t => t.read).map(t => ({ id: t.id, read: t.read }))
         break;
       default:
         if(selected.length > 0){
-          selectedTransactions.set([])
+          selected = []
         } else {
-          selectedTransactions.set(transactions.map(t => { t.id, t.read }))
+          selected = transactions.map(t => ({ id: t.id, read: t.read }))
         }
     }
   }

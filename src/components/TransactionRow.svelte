@@ -9,11 +9,11 @@
   let value = { id: transaction.id, read: transaction.read }
 	
 	function updateChekbox(group) {
-		checked = group.indexOf(value) >= 0
+		checked = group.map(g => g.id).indexOf(value.id) >= 0
 	}
 	
 	function updateGroup(checked) {
-		const index = group.indexOf(value)
+		const index = group.map(g => g.id).indexOf(value.id)
 		if (checked) {
 			if (index < 0) {
 				group.push(value)
