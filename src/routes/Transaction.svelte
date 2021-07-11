@@ -25,9 +25,9 @@
     else { console.log(result.error) }
   }
 
-  const toggleRead = async () => {
-    let result = await api.updateTransaction(transaction.id, { read: !transaction.read });
-    if (result && !result.error) { transaction = result }
+  const markUnread = async () => {
+    let result = await api.updateTransaction(transaction.id, { read: false });
+    if (result && !result.error) { pop() }
     else { console.log(result.error) }
   }
 </script>
@@ -51,7 +51,7 @@
       <div class="card">
         <div class="card-header capitalize">
           <p class="card-header-title">{transaction.merchantName || transaction.name}</p>
-          <p class="card-header-icon" on:click={toggleRead}><Unread read={transaction.read} /></p>
+          <p class="card-header-icon" on:click={markUnread}><Unread read={transaction.read} /></p>
           <p class="card-header-icon" on:click={toggleStar}><Starred starred={transaction.starred} /></p>
         </div>
         <div class="card-content">

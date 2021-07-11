@@ -3,11 +3,16 @@
   import Fa from 'svelte-fa'
   import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
   import TransactionRow from './TransactionRow.svelte';
+  import Multiselect from './Multiselect.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
   import { onMount } from 'svelte';
+  import { selectedTransactions } from '../store.js';
   import collapse from 'svelte-collapse'
   let unreadOpen = true, readOpen = true;
   let loading = true, refresh = false;
+  let selected = [];
+  selectedTransactions.subscribe((s) => { selected = s })
+
   // export let filter;
   
   let transactions=[],unreadTransactions=[],readTransactions=[];
@@ -41,8 +46,9 @@
     <div class="lds-ellipsis"><div></div><div></div><div></div><div></div></div>
   </div>
 {:else}
-  <div class="m-2" on:click={() => getTransactions(true)}>
-    <span class="refresh-button" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+  <div class="mb-2 is-flex is-align-items-center" >
+    <Multiselect selected={selected}/>
+    <span on:click={() => getTransactions(true)} class="inline-block pl-3" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
   </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
@@ -54,7 +60,7 @@
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             {#each unreadTransactions as transaction, i}
-              <TransactionRow transaction={transaction}/>
+              <TransactionRow transaction={transaction} bind:group={selected} />
             {/each}
           </tbody>
         </table>
@@ -72,7 +78,7 @@
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             {#each readTransactions as transaction, i}
-              <TransactionRow transaction={transaction}/>
+              <TransactionRow transaction={transaction} bind:group={selected}/>
             {/each}
           </tbody>
         </table>
@@ -82,8 +88,8 @@
 {/if}
 
 <style>
-  .refresh-button {
-    display: block; 
+  .inline-block {
+    display: inline-block; 
     width: fit-content;
   }
 

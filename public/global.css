@@ -74,6 +74,24 @@ button:focus {
 	cursor: pointer;
 }
 
+.button-link {
+    font-weight: 400;
+    color: #363636;
+    background-color: transparent;
+    border-color: transparent;
+}
+.button-link:hover {
+	color: #262626;
+	text-decoration: underline;
+	background-color: transparent;
+	border-color: transparent;
+}
+.button-link:focus {
+	text-decoration: underline;
+	border-color: transparent;
+	box-shadow: none;
+}
+
 /* Main Layout */
 .main-content-container {
 	display: flex;
