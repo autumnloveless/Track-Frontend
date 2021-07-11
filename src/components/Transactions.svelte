@@ -17,7 +17,10 @@
     selectedUnread = s.reduce((total, current) => { total && !current.read }, false);
   });
 
-  // export let filter;
+  export let filter, selectedAccounts;
+  if(filter) { 
+    //filter by tag?
+  }
   
   let transactions=[],unreadTransactions=[],readTransactions=[];
   onMount(async () => await getTransactions())
@@ -89,7 +92,13 @@
   </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
-      <p class="card-header-title">Unread ({unreadTransactions.length})</p>
+      <p class="card-header-title">Unread (
+        {#if selectedAccounts.length == 0}
+          {unreadTransactions.length}
+        {:else}
+          {unreadTransactions.filter((t) => selectedAccounts.indexOf(t.accountId) != -1).length}
+        {/if}  
+      )</p>
       <CollapseIcon open={unreadOpen} />
     </div>
     <div class="card-content p-0" use:collapse={{open: unreadOpen, duration: 0.6}}>
@@ -97,7 +106,9 @@
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             {#each unreadTransactions as transaction, i}
-              <TransactionRow transaction={transaction} bind:group={$selectedTransactions} />
+              {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
+                <TransactionRow transaction={transaction} bind:group={$selectedTransactions} />
+              {/if}
             {/each}
           </tbody>
         </table>
@@ -107,7 +118,13 @@
 
   <div class="card mt-5">
     <div class="card-header capitalize thin-border-bottom" on:click={() => readOpen = !readOpen}>
-      <p class="card-header-title">Read ({readTransactions.length})</p>
+      <p class="card-header-title">Read (
+        {#if selectedAccounts.length == 0}
+          {readTransactions.length}
+        {:else}
+          {readTransactions.filter((t) => selectedAccounts.indexOf(t.accountId) != -1).length}
+        {/if}
+        )</p>
       <CollapseIcon open={readOpen} />
     </div>
     <div class="card-content p-0" use:collapse={{open: readOpen, duration: 0.6}}>
@@ -115,7 +132,9 @@
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             {#each readTransactions as transaction, i}
-              <TransactionRow transaction={transaction} bind:group={selected}/>
+              {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
+                <TransactionRow transaction={transaction} bind:group={selected}/>
+              {/if}
             {/each}
           </tbody>
         </table>

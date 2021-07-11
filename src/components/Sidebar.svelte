@@ -1,10 +1,9 @@
 <script>
-  export let filter,accounts;
+  export let filter,accounts,selectedAccounts = [];
   import collapse from 'svelte-collapse'
   import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   let open = true;
-  let selectedAccounts = [];
   const selectAccount = () => {
     selectedAccounts = selectedAccounts.length > 0 ? [] : accounts.map(a => a.accountId);
   }
