@@ -21,7 +21,7 @@ const checkAuth = async () => {
 }
 
 const login = async (user_login) => {
-    let response = await fetch('http://localhost:3300/api/login', {
+    let response = await fetch(process.env.API_URL + 'api/login', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         credentials: 'include', // include, *same-origin, omit
         headers: { 'Content-Type': 'application/json' },
@@ -43,7 +43,7 @@ const login = async (user_login) => {
 const logout = async () => {
     let {user:userAuth} = await checkAuth();
     if(!userAuth || !userAuth.id) { return }
-    let response = await fetch('http://localhost:3300/api/logout', {
+    let response = await fetch(process.env.API_URL + 'api/logout', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + _accessToken },
     });
@@ -55,7 +55,7 @@ const logout = async () => {
 }
 
 const refreshToken = async () => {
-    let response = await fetch('http://localhost:3300/api/token', {
+    let response = await fetch(process.env.API_URL + 'api/token', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         credentials: 'include', // include, *same-origin, omit
     });
@@ -73,7 +73,7 @@ const refreshToken = async () => {
 
 const register = async(user_info) => {
     // Default options are marked with *
-    let response = await fetch('http://localhost:3300/api/register', {
+    let response = await fetch(process.env.API_URL + 'api/register', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         credentials: 'include', // include, *same-origin, omit
         headers: { 'Content-Type': 'application/json' },
@@ -95,7 +95,7 @@ const register = async(user_info) => {
 
 const getUser = async() => {
 
-    let response = await fetch('http://localhost:3300/api/user', {
+    let response = await fetch(process.env.API_URL + 'api/user', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + _accessToken },
     });

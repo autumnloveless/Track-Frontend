@@ -5,6 +5,9 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import css from 'rollup-plugin-css-only';
 import sveltePreprocess from 'svelte-preprocess';
+import replace from '@rollup/plugin-replace';
+// import dotenv from 'dotenv'; // use this if not using doppler for environment variables
+// dotenv.config(); // use this if not using doppler for environment variables
 
 const production = !process.env.ROLLUP_WATCH;
 
@@ -38,6 +41,14 @@ export default {
 		file: 'public/build/bundle.js'
 	},
 	plugins: [
+		replace({
+            process: JSON.stringify({
+				env: {
+					API_URL: process.env.API_URL
+				}
+			}),
+         	preventAssignment: true
+		}),
 		svelte({
 			preprocess: sveltePreprocess(),
 			compilerOptions: {

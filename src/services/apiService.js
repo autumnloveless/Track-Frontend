@@ -5,7 +5,7 @@ let link_token = "";
 
 const getAccounts = async () => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/accounts', {
+    let response = await fetch(process.env.API_URL + 'api/accounts', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });
@@ -15,7 +15,7 @@ const getAccounts = async () => {
 
 const getTransactions = async () => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/transactions', {
+    let response = await fetch(process.env.API_URL + 'api/transactions', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });
@@ -25,7 +25,7 @@ const getTransactions = async () => {
 
 const getTransaction = async (id) => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/transactions/' + id, {
+    let response = await fetch(process.env.API_URL + 'api/transactions/' + id, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });
@@ -35,7 +35,7 @@ const getTransaction = async (id) => {
 
 const updateTransactions = async () => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/plaid/update_transactions', {
+    let response = await fetch(process.env.API_URL + 'api/plaid/update_transactions', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: {
             'Content-Type': 'application/json',
@@ -48,7 +48,7 @@ const updateTransactions = async () => {
 
 const updateTransaction = async (id, body) => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/transactions/' + id, {
+    let response = await fetch(process.env.API_URL + 'api/transactions/' + id, {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         headers: {
             'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ const updateTransaction = async (id, body) => {
 
 const bulkUpdateTransactions = async (body) => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/transactions/bulkUpdate', {
+    let response = await fetch(process.env.API_URL + 'api/transactions/bulkUpdate', {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         headers: {
             'Content-Type': 'application/json',
@@ -78,7 +78,7 @@ const bulkUpdateTransactions = async (body) => {
 const linkBankAccount = async () => {
     // Get link Token
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/plaid/link_token', {
+    let response = await fetch(process.env.API_URL + 'api/plaid/link_token', {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });
@@ -101,7 +101,7 @@ const linkBankAccount = async () => {
 
 const setPlaidAccessToken = async(public_token) => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/plaid/access_token', {
+    let response = await fetch(process.env.API_URL + 'api/plaid/access_token', {
         method: 'POST', // *GET, POST, PUT, DELETE, etc.
         headers: { 
             'Authorization': 'Bearer ' + accessToken,
