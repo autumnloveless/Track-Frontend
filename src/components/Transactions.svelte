@@ -5,13 +5,17 @@
   import TransactionRow from './TransactionRow.svelte';
   import Multiselect from './Multiselect.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
+  import Unread from '../components/Unread.svelte';
   import { onMount } from 'svelte';
   import { selectedTransactions } from '../store.js';
   import collapse from 'svelte-collapse'
   let unreadOpen = true, readOpen = true;
   let loading = true, refresh = false;
-  let selected = [];
-  selectedTransactions.subscribe((s) => { selected = s })
+  let selected = [], selectedUnread = false;
+  selectedTransactions.subscribe((s) => { 
+    selected = s;
+    selectedUnread = s.reduce((total, current) => { total && !current.read }, false);
+  });
 
   // export let filter;
   
@@ -39,6 +43,21 @@
       setTimeout(function() { refresh = true; }, 10);
   }
 
+  const updateManyRead = async (isRead) => {
+    result = await api.updateMultipleTransactions({
+      ids: selected.map(id => id),
+      update: { read: isRead }
+    })
+  }
+
+  const handleMultiselectButton = async () => {
+    if(selected.length > 0){
+      selectedTransactions.set([])
+    } else {
+      selectedTransactions.set(transactions.map(t => t.id))
+    }
+  }
+
 </script>
 
 {#if loading}
@@ -47,8 +66,11 @@
   </div>
 {:else}
   <div class="mb-2 is-flex is-align-items-center" >
-    <Multiselect selected={selected}/>
+    <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
     <span on:click={() => getTransactions(true)} class="inline-block pl-3" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+    {#if selected.length > 0}
+      <div class="pl-3" style="transform: scale(1.3)"><Unread read={selectedUnread} /></div>
+    {/if}
   </div>
   <div class="card">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
@@ -60,7 +82,7 @@
         <table class="table is-hoverable is-fullwidth">
           <tbody>
             {#each unreadTransactions as transaction, i}
-              <TransactionRow transaction={transaction} bind:group={selected} />
+              <TransactionRow transaction={transaction} bind:group={$selectedTransactions} />
             {/each}
           </tbody>
         </table>

@@ -60,6 +60,21 @@ const updateTransaction = async (id, body) => {
     return response.transaction || response.error;
 }
 
+const updateMultipleTransactions = async (body) => {
+    let { accessToken, user} = await checkAuth();
+    let response = await fetch('http://localhost:3300/api/transactions/updateMultiple', {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken,
+        },
+        body: JSON.stringify(body) // body data type must match "Content-Type" header
+        // { ids: "", update: {"read": false } }
+    });
+    response = await response.json();
+    return response.success || response.error;
+}
+
 const linkBankAccount = async () => {
     // Get link Token
     let { accessToken, user} = await checkAuth();
@@ -98,4 +113,5 @@ const setPlaidAccessToken = async(public_token) => {
 }
 
 
-export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,updateTransaction,getTransaction }
+export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
+    updateTransaction,getTransaction, updateMultipleTransactions }
