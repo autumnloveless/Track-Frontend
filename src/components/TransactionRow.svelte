@@ -6,16 +6,17 @@
 
   $: updateChekbox(group)
 	$: updateGroup(checked)
+  let value = { id: transaction.id, read: transaction.read }
 	
 	function updateChekbox(group) {
-		checked = group.indexOf(transaction.id) >= 0
+		checked = group.indexOf(value) >= 0
 	}
 	
 	function updateGroup(checked) {
-		const index = group.indexOf(transaction.id)
+		const index = group.indexOf(value)
 		if (checked) {
 			if (index < 0) {
-				group.push(transaction.id)
+				group.push(value)
 				group = group
 			}
 		} else {
@@ -42,6 +43,7 @@
 
   const checkItem = async (e) => {
     e.stopPropagation();
+    checked = !checked;
   }
 
   const openItem = async () => {
@@ -52,9 +54,9 @@
 </script>
 
 <tr class:is_read="{transaction.read}" on:click={openItem}>
-  <td class="is-narrow"><input type="checkbox" bind:checked={checked} on:click={checkItem} value={transaction.id}></td>
+  <td class="is-narrow" on:click={checkItem}><input class="" type="checkbox" bind:checked={checked} on:click={checkItem} value={value}></td>
   <td class="is-narrow" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
-  <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
+  <td class:green="{transaction.amount < 0}" class="has-text-right ">${transaction.amount.toFixed(2)}</td>
   <td>{ transaction.merchantName || transaction.name}</td>
   <td class="has-text-right">{new Date(transaction.date).toLocaleString("en", {
     year: '2-digit',

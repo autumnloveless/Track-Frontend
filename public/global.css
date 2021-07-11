@@ -96,6 +96,10 @@ button:focus {
 	border: none !important;
 }
 
+.green {
+	color: green;
+}
+
 /* Main Layout */
 .main-content-container {
 	display: flex;

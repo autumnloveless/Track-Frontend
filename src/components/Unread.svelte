@@ -6,7 +6,7 @@
 </script>
 
 {#if read}
-    <Fa icon={faEnvelopeOpen}/>
+    <div title="mark as read"><Fa icon={faEnvelopeOpen}/></div>
 {:else}
-    <Fa icon={faEnvelope}/>
+    <div title="mark as unread"><Fa icon={faEnvelope}/></div>
 {/if}

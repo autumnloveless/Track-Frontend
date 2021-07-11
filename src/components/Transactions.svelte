@@ -14,8 +14,13 @@
   let selected = [], selectedUnread = false;
   selectedTransactions.subscribe((s) => { 
     selected = s;
-    selectedUnread = s.reduce((total, current) => { total && !current.read }, false);
   });
+
+  $: { 
+    selectedTransactions.set(selected)
+    selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
+    console.log(selected)
+  }
 
   export let filter, selectedAccounts;
   if(filter) { 
@@ -28,6 +33,8 @@
   const getTransactions = async (isRefresh = false) => {
     if (isRefresh) { rotateButton() }
     else { loading = true; }
+    selectedTransactions.set([]);
+    selected = [];
     transactions = await api.getTransactions();
     unreadTransactions = [];
     readTransactions = [];
@@ -47,31 +54,32 @@
   }
 
   const updateManyRead = async (isRead) => {
-    result = await api.updateMultipleTransactions({
-      ids: selected.map(id => id),
+    let result = await api.bulkUpdateTransactions({
+      ids: selected.map(s => s.id),
       update: { read: isRead }
     })
+    await getTransactions(true);
   }
 
   const handleMultiselectButton = async (event) => {
     switch(event.detail.option) {
       case "all":
-        selectedTransactions.set(transactions.map(t => t.id))
+        selectedTransactions.set(transactions.map(t => { t.id, t.read }))
         break;
       case "none":
         selectedTransactions.set([])
         break;
       case "unread":
-        selectedTransactions.set(transactions.filter(t => !t.read).map(t => t.id))
+        selectedTransactions.set(transactions.filter(t => !t.read).map(t => { t.id, t.read }))
         break;
       case "read":
-        selectedTransactions.set(transactions.filter(t => t.read).map(t => t.id))
+        selectedTransactions.set(transactions.filter(t => t.read).map(t => { t.id, t.read }))
         break;
       default:
         if(selected.length > 0){
           selectedTransactions.set([])
         } else {
-          selectedTransactions.set(transactions.map(t => t.id))
+          selectedTransactions.set(transactions.map(t => { t.id, t.read }))
         }
     }
   }
@@ -87,7 +95,7 @@
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
     <span on:click={() => getTransactions(true)} class="inline-block ml-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
-      <div class="pl-3" style="transform: scale(1.3)"><Unread read={selectedUnread} /></div>
+      <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
   </div>
   <div class="card">
@@ -105,9 +113,9 @@
       <div class="table-container">
         <table class="table is-hoverable is-fullwidth">
           <tbody>
-            {#each unreadTransactions as transaction, i}
+            {#each unreadTransactions as transaction (transaction.id)}
               {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
-                <TransactionRow transaction={transaction} bind:group={$selectedTransactions} />
+                <TransactionRow transaction={transaction} bind:group={selected} />
               {/if}
             {/each}
           </tbody>
@@ -131,7 +139,7 @@
       <div class="table-container">
         <table class="table is-hoverable is-fullwidth">
           <tbody>
-            {#each readTransactions as transaction, i}
+            {#each readTransactions as transaction (transaction.id)}
               {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
                 <TransactionRow transaction={transaction} bind:group={selected}/>
               {/if}

@@ -60,9 +60,9 @@ const updateTransaction = async (id, body) => {
     return response.transaction || response.error;
 }
 
-const updateMultipleTransactions = async (body) => {
+const bulkUpdateTransactions = async (body) => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch('http://localhost:3300/api/transactions/updateMultiple', {
+    let response = await fetch('http://localhost:3300/api/transactions/bulkUpdate', {
         method: 'PUT', // *GET, POST, PUT, DELETE, etc.
         headers: {
             'Content-Type': 'application/json',
@@ -114,4 +114,4 @@ const setPlaidAccessToken = async(public_token) => {
 
 
 export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
-    updateTransaction,getTransaction, updateMultipleTransactions }
+    updateTransaction,getTransaction, bulkUpdateTransactions }
