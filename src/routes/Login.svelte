@@ -51,8 +51,8 @@
               </div>
             </div>
             <div class="field">
-              <label for="" class="checkbox">
-                <input type="checkbox" bind:value={rememberMe}>
+              <label for="rememberme" class="checkbox">
+                <input name="rememberme" id="rememberme" type="checkbox" bind:checked={rememberMe}>
                 Remember me
               </label>
             </div>
