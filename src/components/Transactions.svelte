@@ -33,8 +33,6 @@
   const getTransactions = async (isRefresh = false) => {
     if (isRefresh) { rotateButton() }
     else { loading = true; }
-    selectedTransactions.set([]);
-    selected = [];
     transactions = await api.getTransactions();
     unreadTransactions = [];
     readTransactions = [];
