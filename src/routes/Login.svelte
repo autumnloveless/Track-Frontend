@@ -7,7 +7,7 @@
   import { login as loginAPI } from '../services/authService.js'
   import {push} from 'svelte-spa-router'
   let email= "",password = "";
-  let rememberMe = false, loading = false;
+  let rememberMe = true, loading = false;
 
   onMount(async () => {
     let { user } = await checkAuth();

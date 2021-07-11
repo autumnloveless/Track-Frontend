@@ -1,4 +1,5 @@
 import { user, accessToken } from "../store";
+import { push } from "svelte-spa-router";
 import jwt from "jwt-decode";
 
 let _accessToken, _user;
@@ -51,7 +52,7 @@ const logout = async () => {
     _user = {};
     accessToken.set(null);
     _accessToken = null;
-
+    push('/login');
 }
 
 const refreshToken = async () => {
