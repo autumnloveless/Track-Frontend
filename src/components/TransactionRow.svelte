@@ -56,5 +56,11 @@
   <td class="is-narrow" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
   <td class="has-text-right ">${transaction.amount.toFixed(2)}</td>
   <td>{ transaction.merchantName || transaction.name}</td>
-  <td class="has-text-right">{new Date(transaction.date).toLocaleString()}</td>
+  <td class="has-text-right">{new Date(transaction.date).toLocaleString("en", {
+    year: '2-digit',
+    month: '2-digit',
+    day: '2-digit',
+    hour: 'numeric',
+    minute: 'numeric'
+  })}</td>
 </tr>

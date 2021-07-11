@@ -14,8 +14,9 @@
       <li><button type="button" class="button-link" on:click={() => filter = "starred"}>Starred</button></li>
     </ul>
 
-    <p class="pointer menu-label is-hidden-mobile" style="margin-top: 3em" on:click={() => open = !open}>
-      <span>Accounts</span>
+    <p class="pointer menu-label is-hidden-mobile is-flex is-align-items-center" style="margin-top: 3em" on:click={() => open = !open}>
+      <input type="checkbox" on:click|stopPropagation={() => {}}>
+      <span class="mx-3">Accounts</span>
       {#if open}
         <span class=""><Fa icon={faAngleUp}/></span>
       {:else}
