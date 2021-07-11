@@ -11,7 +11,6 @@
     <p class="menu-label is-hidden-mobile">Inbox</p>
     <ul class="menu-list">
       <li><button type="button" class="button-link" on:click={() => filter = "all"}>All</button></li>
-      <li><button type="button" class="button-link" on:click={() => filter = "unread"}>Unread</button></li>
       <li><button type="button" class="button-link" on:click={() => filter = "starred"}>Starred</button></li>
     </ul>
 

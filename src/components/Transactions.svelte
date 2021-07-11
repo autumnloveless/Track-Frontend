@@ -50,11 +50,26 @@
     })
   }
 
-  const handleMultiselectButton = async () => {
-    if(selected.length > 0){
-      selectedTransactions.set([])
-    } else {
-      selectedTransactions.set(transactions.map(t => t.id))
+  const handleMultiselectButton = async (event) => {
+    switch(event.detail.option) {
+      case "all":
+        selectedTransactions.set(transactions.map(t => t.id))
+        break;
+      case "none":
+        selectedTransactions.set([])
+        break;
+      case "unread":
+        selectedTransactions.set(transactions.filter(t => !t.read).map(t => t.id))
+        break;
+      case "read":
+        selectedTransactions.set(transactions.filter(t => t.read).map(t => t.id))
+        break;
+      default:
+        if(selected.length > 0){
+          selectedTransactions.set([])
+        } else {
+          selectedTransactions.set(transactions.map(t => t.id))
+        }
     }
   }
 
@@ -67,7 +82,7 @@
 {:else}
   <div class="mb-2 is-flex is-align-items-center" >
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
-    <span on:click={() => getTransactions(true)} class="inline-block pl-3" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+    <span on:click={() => getTransactions(true)} class="inline-block ml-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
       <div class="pl-3" style="transform: scale(1.3)"><Unread read={selectedUnread} /></div>
     {/if}
