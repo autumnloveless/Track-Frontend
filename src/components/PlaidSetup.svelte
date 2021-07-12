@@ -1,7 +1,7 @@
 <script>
     import api from '../services/apiService.js';
     const updateTransactions = async () => {
-        result = await api.updateTransactions();
+        let result = await api.updateTransactions();
         if (result.success){
             location.reload();
         }
