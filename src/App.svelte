@@ -21,7 +21,7 @@
     '/signup': Signup,
     '/logout': Logout,
     '/forgot_password': ForgotPassword,
-    '/reset_password': ResetPassword,
+    '/reset_password/:id': ResetPassword,
     '/transactions/:id': Transaction,
     '*': Home,
   }
