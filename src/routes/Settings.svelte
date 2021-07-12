@@ -2,10 +2,12 @@
   import {fade} from 'svelte/transition'
   import api from '../services/apiService.js';
   import Accounts from '../components/Accounts.svelte'
+  import EditUserModal from '../components/EditUserModal.svelte'
   import { toast } from '@zerodevx/svelte-toast'
   import { push, pop,replace } from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
+  let modalActive = false;
 
   onMount(async () => {
     let { user } = await checkAuth();
@@ -23,9 +25,22 @@
       }});
     }
   }
+
+  const deleteAccount = () => {
+    toast.push('Error - Not Implemented Yet', { theme: {
+        '--toastBackground': '#F56565',
+        '--toastProgressBackground': '#C53030'
+      }});
+  }
+
+  const updateInfo = () => {
+    modalActive = true;
+  }
+
   let accountPromise = api.getAccounts();
 </script>
 
+<EditUserModal bind:active={modalActive} />
 
 <section class="main-content-container" in:fade="{{duration: 500}}">
   <aside class="sidebar mt-5 is-hidden-mobile">
@@ -41,9 +56,15 @@
     <div class="card">
       <div class="card-header capitalize"><p class="card-header-title">Settings</p></div>
       <div class="card-content">
-        <div class="is-flex is-flex-direction-column is-align-items-center">
-          <button class="button is-info m-2" on:click={api.linkBankAccount}>Add Bank Account</button>
-          <button class="button is-info m-2" on:click={updateTransactions}>Refresh Transactions</button>
+        <div class="is-flex is-flex-direction-row is-justify-content-center">
+          <div class="is-flex is-flex-direction-column is-align-items-center width-fit">
+            <button class="button is-success is-light m-2" on:click={api.linkBankAccount}>Add Bank Account</button>
+            <button class="button is-info is-light m-2" on:click={updateTransactions}>Refresh Transactions</button>
+          </div>
+          <div class="is-flex is-flex-direction-column is-align-items-center width-fit">
+            <button class="button is-info is-light m-2" on:click={updateInfo}>Update User Info</button>
+            <button class="button is-danger is-light m-2 " on:click={deleteAccount}>Delete Account</button>
+          </div>
         </div>
         <hr>
         <div>
