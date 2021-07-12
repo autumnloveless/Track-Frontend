@@ -36,14 +36,13 @@ const getTransaction = async (id) => {
 const updateTransactions = async () => {
     let { accessToken, user} = await checkAuth();
     let response = await fetch(process.env.API_URL + 'api/plaid/update_transactions', {
-        method: 'POST', // *GET, POST, PUT, DELETE, etc.
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: {
             'Content-Type': 'application/json',
             'Authorization': 'Bearer ' + accessToken,
         },
-        body: JSON.stringify({ item_id: 'LD8B4LeA4vcAxnp16eqKS5DMANdNmVtkERwV1'}) // body data type must match "Content-Type" header
     });
-    return response;
+    return response.JSON();
 }
 
 const updateTransaction = async (id, body) => {
