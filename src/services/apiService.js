@@ -111,6 +111,20 @@ const setPlaidAccessToken = async(public_token) => {
     return response;
 }
 
+const updateUser = async (body) => {
+    let { accessToken, user} = await checkAuth();
+    let response = await fetch(process.env.API_URL + 'api/user', {
+        method: 'PUT', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + accessToken,
+        },
+        body: JSON.stringify(body) // body data type must match "Content-Type" header
+    });
+    response = await response.json();
+    return response
+}
+
 
 export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
-    updateTransaction,getTransaction, bulkUpdateTransactions }
+    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser }

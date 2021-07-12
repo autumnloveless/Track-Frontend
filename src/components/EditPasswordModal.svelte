@@ -1,5 +1,7 @@
 <script>
     import { faLock, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
+    import api from '../services/apiService.js'
+    import { toast } from '@zerodevx/svelte-toast'
     import Fa from 'svelte-fa'
     export let active = false;
     let strength = 0;
@@ -23,17 +25,19 @@
     }
 
     const updateUserInfo = async (e) => {
-        loading = true;
-        // let result = await register({ 
-        //     email: email,
-        //     password: password, 
-        //     firstName: firstName, 
-        //     lastName: lastName 
-        // })
-        loading = false;
-        // if (result.success) { push('/app') }
-        // if (result.error) { error = result.error }
-        active = false;
+      loading = true;
+      let result = await api.updateUser({ 
+          email: email,
+          firstName: firstName, 
+          lastName: lastName 
+      });
+      loading = false;
+      if (result.success) { toast.push("User updated")  }
+      if (result.error) { toast.push('Error updating user', { theme: {
+      '--toastBackground': '#F56565',
+      '--toastProgressBackground': '#C53030'
+      }}); }
+      active = false;
     }
 </script>
 

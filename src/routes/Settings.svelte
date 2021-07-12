@@ -37,7 +37,7 @@
   let accountPromise = api.getAccounts();
 </script>
 
-<EditUserModal bind:active={userModalActive} user={user} />
+<EditUserModal bind:active={userModalActive} user={user} on:reload={async () => ({ user } = await checkAuth())} />
 <EditPassModal bind:active={passModalActive} />
 
 <section class="main-content-container" in:fade="{{duration: 500}}">

@@ -1,30 +1,28 @@
 <script>
-    import { faLock, faEnvelope, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
+    import { faEnvelope } from '@fortawesome/free-solid-svg-icons'
+    import { createEventDispatcher } from 'svelte';
     import Fa from 'svelte-fa'
+    import api from '../services/apiService.js'
+    import { toast } from '@zerodevx/svelte-toast'
+    const dispatch = createEventDispatcher();
     export let active = false, user = {};
-    let strength = 0;
     let loading = false;
-    let validations = [];
-    let firstName="",lastName="",email = "";
-
-    $: {  
-      firstName = user?.firstName;
-      lastName = user?.lastName;
-      email = user?.email;
-    }
 
     const updateUserInfo = async (e) => {
-        loading = true;
-        // let result = await register({ 
-        //     email: email,
-        //     password: password, 
-        //     firstName: firstName, 
-        //     lastName: lastName 
-        // })
-        loading = false;
-        // if (result.success) { push('/app') }
-        // if (result.error) { error = result.error }
-        active = false;
+      loading = true;
+      let result = await api.updateUser({ 
+          email: user?.email,
+          firstName: user?.firstName, 
+          lastName: user?.lastName 
+      });
+      loading = false;
+      if (result.success) { toast.push("User updated")  }
+      if (result.error) { toast.push('Error updating user', { theme: {
+      '--toastBackground': '#F56565',
+      '--toastProgressBackground': '#C53030'
+      }}); }
+      dispatch('reload');
+      active = false;
     }
 </script>
 
@@ -39,7 +37,7 @@
         <div class="field">
             <label for="firstName" class="label">First Name</label>
             <div class="control has-icons-left">
-              <input type="text" placeholder="Robert" bind:value={firstName} class="input" required>
+              <input type="text" placeholder="Robert" bind:value={user.firstName} class="input" required>
               <span class="icon is-small is-left">
                 <Fa icon={faEnvelope}/>
               </span>
@@ -48,7 +46,7 @@
           <div class="field">
             <label for="lastName" class="label">Last Name</label>
             <div class="control has-icons-left">
-              <input type="text" placeholder="Smith" bind:value={lastName} class="input" required>
+              <input type="text" placeholder="Smith" bind:value={user.lastName} class="input" required>
               <span class="icon is-small is-left">
                 <Fa icon={faEnvelope}/>
               </span>
@@ -57,7 +55,7 @@
           <div class="field">
             <label for="email" class="label">Email</label>
             <div class="control has-icons-left">
-              <input type="email" placeholder="bobsmith@gmail.com" bind:value={email} class="input" required>
+              <input type="email" placeholder="bobsmith@gmail.com" bind:value={user.email} class="input" required>
               <span class="icon is-small is-left">
                 <Fa icon={faEnvelope}/>
               </span>
