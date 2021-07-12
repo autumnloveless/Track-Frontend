@@ -1,6 +1,4 @@
 <script>
-import { push } from 'svelte-spa-router';
-
     import api from '../services/apiService.js';
     const updateTransactions = async () => {
         result = await api.updateTransactions();

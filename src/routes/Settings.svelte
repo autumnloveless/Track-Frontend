@@ -2,6 +2,7 @@
   import {fade} from 'svelte/transition'
   import api from '../services/apiService.js';
   import Accounts from '../components/Accounts.svelte'
+  import { toast } from '@zerodevx/svelte-toast'
   import { push, pop,replace } from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
@@ -11,6 +12,17 @@
     if(!user || !user.id){ replace('/app') }
   })
 
+  const updateTransactions = async () => {
+    let result = await api.updateTransactions();
+    if (result.success){
+      toast.push('Transactions refreshed succesfully');
+    } else {
+      toast.push('Error refreshing transactions', { theme: {
+        '--toastBackground': '#F56565',
+        '--toastProgressBackground': '#C53030'
+      }});
+    }
+  }
   let accountPromise = api.getAccounts();
 </script>
 
@@ -31,7 +43,7 @@
       <div class="card-content">
         <div class="is-flex is-flex-direction-column is-align-items-center">
           <button class="button is-info m-2" on:click={api.linkBankAccount}>Add Bank Account</button>
-          <button class="button is-info m-2" on:click={api.updateTransactions}>Refresh Transactions</button>
+          <button class="button is-info m-2" on:click={updateTransactions}>Refresh Transactions</button>
         </div>
         <hr>
         <div>

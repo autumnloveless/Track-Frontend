@@ -42,7 +42,7 @@ const updateTransactions = async () => {
             'Authorization': 'Bearer ' + accessToken,
         },
     });
-    return response.JSON();
+    return response.json();
 }
 
 const updateTransaction = async (id, body) => {
