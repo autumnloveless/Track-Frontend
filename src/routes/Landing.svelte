@@ -1,7 +1,6 @@
 <script>
 
 import { push } from "svelte-spa-router";
-
 </script>
 <svelte:head>
     <link rel="stylesheet" href="https://unpkg.com/tailwindcss/dist/tailwind.min.css" />
@@ -20,6 +19,15 @@ import { push } from "svelte-spa-router";
         margin-right: auto !important;
       }
     }
+    .navbar {
+      background-color: #fff;
+    }
+
+    /* custom scrollbar */
+    ::-webkit-scrollbar-track {
+    background-color: #fff;
+    }
+
 </style>
 
 <div id="main" class="scroll leading-normal tracking-normal text-white gradient" style="font-family: 'Source Sans Pro', sans-serif;">

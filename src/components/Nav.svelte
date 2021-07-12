@@ -47,3 +47,9 @@
   </div>
 
 </nav>
+
+<style>
+  .navbar {
+    background-color: transparent;
+  }
+</style>

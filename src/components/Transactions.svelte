@@ -96,7 +96,7 @@
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
   </div>
-  <div class="card">
+  <div class="card light-grey">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
       <p class="card-header-title">Unread (
         {#if selectedAccounts.length == 0}
@@ -122,7 +122,7 @@
     </div>
   </div>
 
-  <div class="card mt-5">
+  <div class="card mt-5 light-grey">
     <div class="card-header capitalize thin-border-bottom" on:click={() => readOpen = !readOpen}>
       <p class="card-header-title">Read (
         {#if selectedAccounts.length == 0}
@@ -157,6 +157,10 @@
 
   .rotate-720 {
     animation: rotate-720 cubic-bezier(0.23,-0.41, 0.69, 1.41) 3s;
+  }
+
+  .light-grey {
+    background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
   }
 
   @keyframes rotate-720 {

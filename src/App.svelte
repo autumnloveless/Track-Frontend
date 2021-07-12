@@ -31,6 +31,14 @@
   <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
 </svelte:head>
 
-<Nav />
-<Router {routes} restoreScrollState={true}/>
-<SvelteToast />
+<div class="all-container">
+  <Nav />
+  <Router {routes} restoreScrollState={true}/>
+  <SvelteToast />
+</div>
+
+<style>
+  .all-container {
+    background-image: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  }
+</style>
