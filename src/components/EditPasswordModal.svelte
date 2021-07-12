@@ -5,16 +5,20 @@
     import Fa from 'svelte-fa'
     export let active = false;
     let strength = 0;
-    let loading = false, matches;
+    let loading = false, matches = false;
     let validations = [];
     let newPassword="",oldPassword="",repeatPassword="";
+    let disableButton = false;
+
+    $: disableButton = (strength < 4 || !matches || newPassword=="" || oldPassword=="" || repeatPassword=="")
+
 
     const validatePassword = (e) => {
         validations = [
-            (password.length > 11),
-            (password.search(/[A-Z]/) > -1),
-            (password.search(/[0-9]/) > -1),
-            (password.search(/[$&+%!,:;=?@#]/) > -1)
+            (newPassword.length > 11),
+            (newPassword.search(/[A-Z]/) > -1),
+            (newPassword.search(/[0-9]/) > -1),
+            (newPassword.search(/[$&+%!,:;=?@#]/) > -1)
         ]
 
         strength = validations.reduce((acc,cur) => acc + cur);
@@ -27,9 +31,7 @@
     const updateUserInfo = async (e) => {
       loading = true;
       let result = await api.updateUser({ 
-          email: email,
-          firstName: firstName, 
-          lastName: lastName 
+          password: newPassword
       });
       loading = false;
       if (result.success) { toast.push("User updated")  }
@@ -52,7 +54,7 @@
         <div class="field">
           <label for="password" class="label">Old Password</label>
           <div class="control has-icons-left">
-            <input type="password" placeholder="*******" class:invalid="{strength == 0}" class="input" bind:value={oldPassword} required on:input={validatePassword}>
+            <input type="password" placeholder="*******" class="input" bind:value={oldPassword} required>
             <span class="icon is-small is-left"><Fa icon={faLock}/></span>
           </div>
         </div>
@@ -74,13 +76,13 @@
         <div class="field">
           <label for="password" class="label">Repeat New Password</label>
           <div class="control has-icons-left">
-            <input type="password" placeholder="*******" class:invalid="{repeatPassword && !matches}" class="input" bind:value={repeatPassword} required on:input={matchPassword}>
+            <input type="password" placeholder="*******" class:invalid="{repeatPassword != "" && !matches}" class="input" bind:value={repeatPassword} required on:input={matchPassword}>
             <span class="icon is-small is-left"><Fa icon={faLock}/></span>
           </div>
         </div>
       </section>
       <footer class="modal-card-foot">
-        <button class="button is-success" on:click={updateUserInfo}>Change Password</button>
+        <button class="button is-success" disabled={disableButton} on:click={updateUserInfo}>Change Password</button>
         <button class="button" class:is-loading="{loading}" on:click={() => active = false}>Cancel</button>
       </footer>
     </div>
