@@ -1,21 +1,16 @@
 <script>
     import { faLock, faEnvelope, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
     import Fa from 'svelte-fa'
-    export let active = false;
+    export let active = false, user = {};
     let strength = 0;
     let loading = false;
     let validations = [];
-    let password="",firstName="",lastName="",email = "";
+    let firstName="",lastName="",email = "";
 
-    const validatePassword = (e) => {
-        validations = [
-            (password.length > 11),
-            (password.search(/[A-Z]/) > -1),
-            (password.search(/[0-9]/) > -1),
-            (password.search(/[$&+%!,:;=?@#]/) > -1)
-        ]
-
-        strength = validations.reduce((acc,cur) => acc + cur);
+    $: {  
+      firstName = user?.firstName;
+      lastName = user?.lastName;
+      email = user?.email;
     }
 
     const updateUserInfo = async (e) => {
@@ -66,23 +61,6 @@
               <span class="icon is-small is-left">
                 <Fa icon={faEnvelope}/>
               </span>
-            </div>
-          </div>
-          <div class="field">
-            <label for="password" class="label">Password</label>
-            <div class="control has-icons-left">
-              <input type="password" placeholder="*******" class:invalid="{strength == 0}" class="input" bind:value={password} required on:input={validatePassword}>
-              <span class="icon is-small is-left">
-                <Fa icon={faLock}/>
-              </span>
-                {#if password && password.length > 0 }
-                    <ul class="pl-1">
-                        <li> {#if validations[0]} <Fa icon={faCheck} color="green"/> {:else}<Fa icon={faTimes} color="red"/> {/if} must be at least 12 characters</li>
-                        <li> {#if validations[1]} <Fa icon={faCheck} color="green"/> {:else}<Fa icon={faTimes} color="red"/> {/if} must contain a capital letter</li>
-                        <li> {#if validations[2]} <Fa icon={faCheck} color="green"/> {:else}<Fa icon={faTimes} color="red"/> {/if} must contain a number</li>
-                        <li> {#if validations[3]} <Fa icon={faCheck} color="green"/> {:else}<Fa icon={faTimes} color="red"/> {/if} must contain one of $&+%!,:;=?@#</li>
-                    </ul>
-                {/if}
             </div>
           </div>
       </section>

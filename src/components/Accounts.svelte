@@ -3,7 +3,7 @@
   import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
   export let accounts;
   import collapse from 'svelte-collapse'
-  let open = true;
+  let open = false;
 </script>
 
 <div class="card">
