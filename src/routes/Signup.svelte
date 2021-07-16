@@ -1,6 +1,7 @@
 <script>
   import {fade} from 'svelte/transition'
   import Fa from 'svelte-fa'
+  import { toast } from '@zerodevx/svelte-toast'
   import { faLock, faEnvelope, faCheck, faTimes } from '@fortawesome/free-solid-svg-icons'
   import { register } from '../services/authService.js'
   import {push,replace} from 'svelte-spa-router'
@@ -8,6 +9,8 @@
   import {checkAuth} from '../services/authService.js';
 
   onMount(async () => {
+    toast.push('Registration is currently unavailable. Please check back later.');
+
     let { user } = await checkAuth();
     if(user && user.id){ replace('/app') }
   })

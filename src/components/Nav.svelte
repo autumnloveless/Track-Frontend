@@ -36,7 +36,7 @@
       <div class="navbar-item">
         <div class="buttons">
           {#if $user.id == undefined}
-            <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a>
+            <!-- <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a> -->
             <a class="button is-light" href="/#/login">Log in</a>
           {:else}
             <button class="button is-light" on:click={logout}>Logout</button>

@@ -28,7 +28,7 @@
 
 <div class:is-active="{open}" class="dropdown">
   <div class="dropdown-trigger" on:mousedown={toggleOpen}>
-    <button class="button border-none" aria-haspopup="true" aria-controls="dropdown-menu2"
+    <button class="button background-transparent border-none" aria-haspopup="true" aria-controls="dropdown-menu2"
     on:focus={() => setOpen(true)} on:blur={() => setOpen(false)} tabindex="0">
       <span tabindex="0" on:click={multiselectButton}>
         {#if selectedLength == transactionsLength}

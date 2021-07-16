@@ -1,7 +1,7 @@
 <script>
   import api from '../services/apiService.js';
   import Fa from 'svelte-fa'
-  import { faRedoAlt } from '@fortawesome/free-solid-svg-icons'
+  import { faRedoAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
   import TransactionRow from './TransactionRow.svelte';
   import Multiselect from './Multiselect.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
@@ -9,7 +9,7 @@
   import { onMount, onDestroy } from 'svelte';
   import { selectedTransactions } from '../store.js';
   import collapse from 'svelte-collapse'
-  let unreadOpen = true, readOpen = true;
+  let unreadOpen = true, readOpen = true, filterOpen = false;
   let loading = true, refresh = false;
   let selected = [], selectedUnread = false;
   let unsubscribe = selectedTransactions.subscribe((s) => { 
@@ -22,7 +22,7 @@
     selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
   }
 
-  export let filter, selectedAccounts;
+  export let filter, selectedAccounts, accounts =[];
   if(filter) { 
     //filter by tag?
   }
@@ -91,10 +91,21 @@
 {:else}
   <div class="mb-2 is-flex is-align-items-center" >
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
-    <span on:click={() => getTransactions(true)} class="inline-block ml-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+    <span on:click={() => getTransactions(true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
+    <span class="inline-block mx-3 pointer is-hidden-tablet" on:click={() => filterOpen = !filterOpen}><Fa icon={faFilter} /></span>
+  </div>
+  <div class="is-hidden-tablet filter-mobile" use:collapse={{open: filterOpen, duration: 0.6}}>
+    <ul class="">
+      {#each accounts as account, i}
+        <li class="p-1">
+          <input id="{account.accountId}" type="checkbox" bind:group={selectedAccounts} value={account.accountId}>
+          <label class="inline-block" for="{account.accountId}">{account.name}</label>
+        </li>
+      {/each}
+    </ul>
   </div>
   <div class="card light-grey">
     <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
@@ -108,17 +119,15 @@
       <CollapseIcon open={unreadOpen} />
     </div>
     <div class="card-content p-0" use:collapse={{open: unreadOpen, duration: 0.6}}>
-      <div class="table-container">
-        <table class="table is-hoverable is-fullwidth">
-          <tbody>
-            {#each unreadTransactions as transaction (transaction.id)}
-              {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
-                <TransactionRow transaction={transaction} bind:group={selected} />
-              {/if}
-            {/each}
-          </tbody>
-        </table>
-      </div>
+      <table class="table is-hoverable">
+        <tbody>
+          {#each unreadTransactions as transaction (transaction.id)}
+            {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
+              <TransactionRow transaction={transaction} bind:group={selected} />
+            {/if}
+          {/each}
+        </tbody>
+      </table>
     </div>
   </div>
 
@@ -135,7 +144,7 @@
     </div>
     <div class="card-content p-0" use:collapse={{open: readOpen, duration: 0.6}}>
       <div class="table-container">
-        <table class="table is-hoverable is-fullwidth">
+        <table class="table is-hoverable">
           <tbody>
             {#each readTransactions as transaction (transaction.id)}
               {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
@@ -161,6 +170,13 @@
 
   .light-grey {
     background-image: linear-gradient(120deg, #fdfbfb 0%, #ebedee 100%);
+  }
+
+  .filter-mobile {
+    background: rgba(0, 0, 0, 0.03);
+    padding: 0px 8px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
   }
 
   @keyframes rotate-720 {

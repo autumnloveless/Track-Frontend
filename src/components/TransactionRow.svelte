@@ -6,6 +6,7 @@
 
   $: updateChekbox(group)
 	$: updateGroup(checked)
+  $: date = new Date(transaction.date);
   let value = { id: transaction.id, read: transaction.read }
 	
 	function updateChekbox(group) {
@@ -51,18 +52,58 @@
     push('/transactions/' + transaction.id)
   }
 
+  const isToday = (checkDate) => {
+    const today = new Date()
+    return checkDate.getDate() === today.getDate() &&
+      checkDate.getMonth() === today.getMonth() &&
+      checkDate.getFullYear() === today.getFullYear();
+  }
+
+  const isThisYear = (checkDate) => {
+    const today = new Date()
+    return checkDate.getFullYear() === today.getFullYear();
+  }
+
 </script>
 
-<tr class:is_read="{transaction.read}" on:click={openItem}>
+<tr class:is_read="{transaction.read}" class="row" on:click={openItem}>
   <td class="is-narrow" on:click={checkItem}><input class="" type="checkbox" bind:checked={checked} on:click={checkItem} value={value}></td>
-  <td class="is-narrow" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
-  <td class:green="{transaction.amount < 0}" class="has-text-right ">${transaction.amount.toFixed(2)}</td>
-  <td>{ transaction.merchantName || transaction.name}</td>
-  <td class="has-text-right">{new Date(transaction.date).toLocaleString("en", {
-    year: '2-digit',
-    month: '2-digit',
-    day: '2-digit',
-    hour: 'numeric',
-    minute: 'numeric'
-  })}</td>
+  <td class="is-narrow is-hidden-mobile" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
+  <td class:green="{transaction.amount < 0}" class="is-hidden-mobile has-text-right currency">${transaction.amount.toFixed(2)}</td>
+  <td class="is-hidden-mobile">{ transaction.merchantName || transaction.name}</td>
+  <td class="is-hidden-tablet">
+    <div class="is-flex is-flex-direction-column">
+      <div class="bold">${transaction.amount.toFixed(2)}</div>
+      <div>{ transaction.merchantName || transaction.name}</div>
+    </div>
+  </td>
+  <td class="has-text-right date is-hidden-mobile">
+    { 
+      isToday(date) 
+      ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
+      : isThisYear(date)
+      ? date.toLocaleString("en", { month: 'short', day: 'numeric' })
+      : date.toLocaleString("en", { year: '2-digit', month: 'short', day: 'numeric' })
+    }
+  </td>
+  <td class="is-narrow has-text-right date is-hidden-tablet">
+    <div class="is-flex is-flex-direction-column is-align-items-space-between">
+      <div>
+        { 
+          isToday(date) 
+          ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
+          : isThisYear(date)
+          ? date.toLocaleString("en", { month: 'short', day: 'numeric' })
+          : date.toLocaleString("en", { year: '2-digit', month: 'short', day: 'numeric' })
+        }
+      </div>
+      <div on:click={toggleStar}>
+        <Starred starred={transaction.starred} />
+      </div>
+    </div>
+  </td>
 </tr>
+
+<style>
+
+</style>
