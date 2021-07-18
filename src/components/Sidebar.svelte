@@ -26,11 +26,11 @@
         <span class=""><Fa icon={faAngleDown}/></span>
       {/if}
     </p>
-    <ul class="menu-list" use:collapse={{open, duration: 0.6}}>
+    <ul class="" use:collapse={{open, duration: 0.6}}>
       {#each accounts as account, i}
-        <li>
-          <input type="checkbox" bind:group={selectedAccounts} value={account.accountId}>
-          <button type="button" class="button-link">{account.name}</button>
+        <li class="is-flex is-align-items-flex-start">
+          <input id="{account.accountId}" type="checkbox" class="mr-1 my-2" bind:group={selectedAccounts} value={account.accountId}>
+          <label for="{account.accountId}" class="mx-1 my-1 pt-0 has-text-left pointer">{account.name}</label>
         </li>
       {/each}
     </ul>
@@ -38,25 +38,7 @@
 </aside>
 
 <style type="text/scss">
-  .button-link {
-    font-weight: 400;
-    color: #363636;
-    background-color: transparent;
-    border-color: transparent;
-
-    &:hover {
-      color: #262626;
-      text-decoration: underline;
-      background-color: transparent;
-      border-color: transparent;
-    }
-
-    &:focus {
-      text-decoration: underline;
-      border-color: transparent;
-      box-shadow: none;
-    }
-
+  .sidebar {
+    max-width: 20vw;
   }
-
 </style>
