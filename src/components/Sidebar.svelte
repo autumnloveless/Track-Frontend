@@ -30,7 +30,11 @@
       {#each accounts as account, i}
         <li class="is-flex is-align-items-flex-start">
           <input id="{account.accountId}" type="checkbox" class="mr-1 my-2" bind:group={selectedAccounts} value={account.accountId}>
-          <label for="{account.accountId}" class="mx-1 my-1 pt-0 has-text-left pointer">{account.name}</label>
+          <label for="{account.accountId}" title="{account.name}" class="mx-1 my-1 pt-0 pr-1 has-text-left pointer sidebar-text">
+            <span class="">{account.name}</span>
+            <br>
+            <b>${account.balanceCurrent}</b>
+          </label>
         </li>
       {/each}
     </ul>
@@ -40,5 +44,11 @@
 <style type="text/scss">
   .sidebar {
     width: 200px;
+  }
+
+  .sidebar-text {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 </style>

@@ -66,10 +66,5 @@
 {/if}
 
 <style>
-  .light-grey-bg {
-    background-color: #00000011;
-  }
-  .light-grey-bg:hover {
-    background-color: #00000022;
-  }
+  
 </style>

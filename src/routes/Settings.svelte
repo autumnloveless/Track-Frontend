@@ -1,5 +1,7 @@
 <script>
   import {fade} from 'svelte/transition'
+  import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+  import Fa from 'svelte-fa'
   import api from '../services/apiService.js';
   import Accounts from '../components/Accounts.svelte'
   import EditUserModal from '../components/EditUserModal.svelte'
@@ -52,7 +54,10 @@
 
   <div class="main-content scroll">
     <div class="card">
-      <div class="card-header capitalize"><p class="card-header-title">Settings</p></div>
+      <div class="card-header capitalize">
+        <p class="card-header-icon light-grey-bg" on:click={pop}><Fa icon={faAngleLeft}/></p>
+        <p class="card-header-title">Settings</p>
+      </div>
       <div class="card-content">
         <div class="is-flex is-justify-content-center">
           <div>
@@ -62,7 +67,7 @@
           </div>
         </div>
         <hr>
-        <div class="is-flex is-flex-direction-row is-justify-content-center">
+        <div class="is-flex is-flex-direction-row is-justify-content-center is-flex-wrap-wrap">
           <div class="is-flex is-flex-direction-column is-align-items-center px-2">
             <button class="button is-success is-light m-2 w-100" on:click={api.linkBankAccount}>Add Bank Account</button>
             <button class="button is-info is-light m-2 w-100" on:click={updateTransactions}>Refresh Transactions</button>

@@ -158,6 +158,13 @@ body {
 	background-color: transparent !important;
 }
 
+.light-grey-bg {
+    background-color: #00000011 !important;
+}
+.light-grey-bg:hover {
+background-color: #00000022 !important;
+}
+
 .bold {
 	font-weight: bold;
 }

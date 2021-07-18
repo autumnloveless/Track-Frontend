@@ -117,9 +117,13 @@
   <div class="is-hidden-tablet filter-mobile" use:collapse={{open: filterOpen, duration: 0.6}}>
     <ul class="">
       {#each accounts as account, i}
-        <li class="p-1">
-          <input id="{account.accountId}" type="checkbox" bind:group={selectedAccounts} value={account.accountId}>
-          <label class="inline-block" for="{account.accountId}">{account.name}</label>
+        <li class="is-flex is-align-items-flex-start">
+          <input id="{account.accountId}" type="checkbox" class="mr-1 my-2" bind:group={selectedAccounts} value={account.accountId}>
+          <label for="{account.accountId}" title="{account.name}" class="mx-1 my-1 pt-0 pr-1 has-text-left pointer sidebar-text">
+            <span class="">{account.name}</span>
+            <br>
+            <b>${account.balanceCurrent}</b>
+          </label>
         </li>
       {/each}
     </ul>
