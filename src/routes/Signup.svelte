@@ -9,8 +9,6 @@
   import {checkAuth} from '../services/authService.js';
 
   onMount(async () => {
-    toast.push('Registration is currently unavailable. Please check back later.');
-
     let { user } = await checkAuth();
     if(user && user.id){ replace('/app') }
   })

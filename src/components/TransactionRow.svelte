@@ -73,7 +73,7 @@
   <td class="is-hidden-mobile">{ transaction.merchantName || transaction.name}</td>
   <td class="is-hidden-tablet">
     <div class="is-flex is-flex-direction-column">
-      <div class="bold">${transaction.amount.toFixed(2)}</div>
+      <div class:green="{transaction.amount < 0}" class="bold">${transaction.amount.toFixed(2)}</div>
       <div>{ transaction.merchantName || transaction.name}</div>
     </div>
   </td>

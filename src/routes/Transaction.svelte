@@ -1,5 +1,7 @@
 <script>
   export let params = {}
+  import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+  import Fa from 'svelte-fa'
   import Unread from '../components/Unread.svelte';
   import Starred from '../components/Starred.svelte';
   import {checkAuth} from '../services/authService.js';
@@ -50,6 +52,7 @@
     <div class="main-content scroll">
       <div class="card">
         <div class="card-header capitalize">
+          <p class="card-header-icon is-hidden-tablet light-grey-bg" on:click={pop}><Fa icon={faAngleLeft}/></p>
           <p class="card-header-title">{transaction.merchantName || transaction.name}</p>
           <p class="card-header-icon" on:click={markUnread}><Unread read={transaction.read} /></p>
           <p class="card-header-icon" on:click={toggleStar}><Starred starred={transaction.starred} /></p>
@@ -70,3 +73,12 @@
 {:else}
   <div>An error occurred while fetching the transaction. If this error occurs again, contact us!</div>
 {/if}
+
+<style>
+  .light-grey-bg {
+    background-color: #00000011;
+  }
+  .light-grey-bg:hover {
+    background-color: #00000022;
+  }
+</style>

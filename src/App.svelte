@@ -29,6 +29,7 @@
 <svelte:head>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css">
   <script src="https://cdn.plaid.com/link/v2/stable/link-initialize.js"></script>
+  <title>Lumin</title>
 </svelte:head>
 
 <div class="all-container">
