@@ -2,7 +2,7 @@
   import api from '../services/apiService.js';
   import { get } from 'svelte/store';
   import Fa from 'svelte-fa'
-  import { faRedoAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
+  import { faRedoAlt, faFilter, faArrowLeft, faArrowRight } from '@fortawesome/free-solid-svg-icons'
   import TransactionRow from './TransactionRow.svelte';
   import Multiselect from './Multiselect.svelte';
   import CollapseIcon from './CollapseIcon.svelte';
@@ -11,9 +11,13 @@
   import { selectedTransactions } from '../store.js';
   import {querystring} from 'svelte-spa-router'
   import collapse from 'svelte-collapse'
-  let searchParams, limit, page;
+  export let selectedAccounts, accounts =[];
+  let readPageSize = 10, unreadPageSize = 10, readPageNum = 1, unreadPageNum = 1;
   let unreadOpen = true, readOpen = true, filterOpen = false;
   let loading = true, refresh = false;
+  let transactions=[],unreadTransactions=[],readTransactions=[];
+  let filteredUnreadTransactions = [], paginatedUnreadTransactions = [];
+  let filteredReadTransactions = [], paginatedReadTransactions = [];
   let selected = [], selectedUnread = false;
   let unsubscribe = selectedTransactions.subscribe((s) => { 
     selected = s;
@@ -24,24 +28,29 @@
     selectedTransactions.set(selected)
     selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
   }
-
-  export let filter, selectedAccounts, accounts =[];
-  if(filter) { 
-    //filter by tag?
-  }
+  $: filteredReadTransactions = filter(readTransactions,selectedAccounts);
+  $: paginatedReadTransactions = paginate(filteredReadTransactions,readPageSize,readPageNum);
+  $: filteredUnreadTransactions = filter(unreadTransactions,selectedAccounts);
+  $: paginatedUnreadTransactions = paginate(filteredUnreadTransactions,unreadPageSize,unreadPageNum);
   
-  let transactions=[],unreadTransactions=[],readTransactions=[];
   onMount(async () => {
-    searchParams = new URLSearchParams(get(querystring));
-    limit = searchParams.get("limit") || 10;
-    page = searchParams.get("page") || 1;
-    await getTransactions(limit,page);
-  })
+    await getTransactions();
+  });
 
-  const getTransactions = async (_limit, _page, isRefresh = false) => {
+  const paginate = (array, page_size, page_number) => {
+    // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+    return array.slice((page_number - 1) * page_size, page_number * page_size);
+  }
+
+  const filter = (array,selectedAccounts) => {
+    if(selectedAccounts.length == 0) { return array; }
+    else { return array.filter(t => selectedAccounts.indexOf(t.accountId) != -1) }
+  }
+
+  const getTransactions = async (isRefresh = false) => {
     if (isRefresh) { rotateButton() }
     else { loading = true; }
-    transactions = await api.getTransactions(_limit,((_page-1) * _limit));
+    transactions = await api.getTransactions();
     unreadTransactions = [];
     readTransactions = [];
     transactions.forEach(transaction => {
@@ -64,7 +73,7 @@
       ids: selected.map(s => s.id),
       update: { read: isRead }
     })
-    await getTransactions(limit,page,true);
+    await getTransactions(true);
   }
 
   const handleMultiselectButton = async (event) => {
@@ -99,7 +108,7 @@
 {:else}
   <div class="mb-2 is-flex is-align-items-center" >
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
-    <span on:click={() => getTransactions(limit,page,true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+    <span on:click={() => getTransactions(true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
@@ -116,23 +125,24 @@
     </ul>
   </div>
   <div class="card light-grey">
-    <div class="card-header capitalize thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
-      <p class="card-header-title">Unread (
-        {#if selectedAccounts.length == 0}
-          {unreadTransactions.length}
-        {:else}
-          {unreadTransactions.filter((t) => selectedAccounts.indexOf(t.accountId) != -1).length}
-        {/if}  
-      )</p>
-      <CollapseIcon open={unreadOpen} />
+    <div class="card-header thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
+      <CollapseIcon open={unreadOpen} />     
+      <p class="card-header-title">Unread ({ filteredUnreadTransactions.length })</p>
+      {#if filteredUnreadTransactions.length > unreadPageSize }
+        <div class="p-3">
+          <nav class="pagination is-small" role="navigation" aria-label="pagination">
+            <div class="px-2">{((unreadPageNum - 1) * unreadPageSize)+1}-{(unreadPageNum*unreadPageSize)} of {filteredUnreadTransactions.length}</div>
+            <button on:click={() => unreadPageNum -= 1} class="pagination-previous"><Fa icon={faArrowLeft} /></button>
+            <button on:click={() => unreadPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
+          </nav>
+        </div>
+      {/if}
     </div>
     <div class="card-content p-0" use:collapse={{open: unreadOpen, duration: 0.6}}>
       <table class="table is-hoverable">
         <tbody>
-          {#each unreadTransactions as transaction (transaction.id)}
-            {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
-              <TransactionRow transaction={transaction} bind:group={selected} />
-            {/if}
+          {#each paginatedUnreadTransactions as transaction (transaction.id)}
+            <TransactionRow transaction={transaction} bind:group={selected} />
           {/each}
         </tbody>
       </table>
@@ -140,24 +150,25 @@
   </div>
 
   <div class="card mt-5 light-grey">
-    <div class="card-header capitalize thin-border-bottom" on:click={() => readOpen = !readOpen}>
-      <p class="card-header-title">Read (
-        {#if selectedAccounts.length == 0}
-          {readTransactions.length}
-        {:else}
-          {readTransactions.filter((t) => selectedAccounts.indexOf(t.accountId) != -1).length}
-        {/if}
-        )</p>
+    <div class="card-header thin-border-bottom" on:click={() => readOpen = !readOpen}>
       <CollapseIcon open={readOpen} />
+      <p class="card-header-title">Read</p>
+        {#if readTransactions.length > readPageSize}
+          <div class="p-3">
+            <nav class="pagination is-small" role="navigation" aria-label="pagination">
+              <div class="px-2">{((readPageNum - 1) * readPageSize)+1}-{(readPageNum*readPageSize)} of {filteredReadTransactions.length}</div>
+              <button on:click|stopPropagation={() => readPageNum -= 1} class="pagination-previous"><Fa icon={faArrowLeft} /></button>
+              <button on:click|stopPropagation={() => readPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
+            </nav>
+          </div>
+        {/if}
     </div>
     <div class="card-content p-0" use:collapse={{open: readOpen, duration: 0.6}}>
       <div class="table-container">
         <table class="table is-hoverable">
           <tbody>
-            {#each readTransactions as transaction (transaction.id)}
-              {#if selectedAccounts.length == 0 || selectedAccounts.indexOf(transaction.accountId) != -1}
-                <TransactionRow transaction={transaction} bind:group={selected}/>
-              {/if}
+            {#each paginatedReadTransactions as transaction (transaction.id)}
+              <TransactionRow transaction={transaction} bind:group={selected}/>
             {/each}
           </tbody>
         </table>

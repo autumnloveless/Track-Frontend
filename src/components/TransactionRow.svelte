@@ -69,7 +69,7 @@
 <tr class:is_read="{transaction.read}" class="row" on:click={openItem}>
   <td class="is-narrow" on:click={checkItem}><input class="" type="checkbox" bind:checked={checked} on:click={checkItem} value={value}></td>
   <td class="is-narrow is-hidden-mobile" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
-  <td class:green="{transaction.amount < 0}" class="is-hidden-mobile has-text-right currency">${transaction.amount.toFixed(2)}</td>
+  <td class:green="{transaction.amount < 0}" class="is-hidden-mobile has-text-right is-narrow currency">${transaction.amount.toFixed(2)}</td>
   <td class="is-hidden-mobile">{ transaction.merchantName || transaction.name}</td>
   <td class="is-hidden-tablet">
     <div class="is-flex is-flex-direction-column">

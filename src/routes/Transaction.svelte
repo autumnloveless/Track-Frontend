@@ -40,19 +40,10 @@
   </div>
 {:else if transaction.id != null}
   <section class="main-content-container">
-    <aside class="sidebar mt-5 ml-2 is-hidden-mobile scroll">
-      <div>
-        <p class="menu-label is-hidden-mobile">Return to Inbox</p>
-        <ul class="menu-list">
-            <li><button on:click={pop} type="button" class="button">Back</button></li>
-        </ul>
-      </div>
-    </aside>
-
     <div class="main-content scroll">
       <div class="card">
         <div class="card-header capitalize">
-          <p class="card-header-icon is-hidden-tablet light-grey-bg" on:click={pop}><Fa icon={faAngleLeft}/></p>
+          <p class="card-header-icon light-grey-bg" on:click={pop}><Fa icon={faAngleLeft}/></p>
           <p class="card-header-title">{transaction.merchantName || transaction.name}</p>
           <p class="card-header-icon" on:click={markUnread}><Unread read={transaction.read} /></p>
           <p class="card-header-icon" on:click={toggleStar}><Starred starred={transaction.starred} /></p>

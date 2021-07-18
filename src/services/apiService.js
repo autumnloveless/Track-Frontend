@@ -13,9 +13,9 @@ const getAccounts = async () => {
     return response.accounts || [];
 }
 
-const getTransactions = async (limit, offset) => {
+const getTransactions = async () => {
     let { accessToken, user} = await checkAuth();
-    let response = await fetch(`${process.env.API_URL}api/transactions?offset=${offset}&limit=${limit}`, {
+    let response = await fetch(`${process.env.API_URL}api/transactions`, {
         method: 'GET', // *GET, POST, PUT, DELETE, etc.
         headers: { 'Authorization': 'Bearer ' + accessToken },
     });

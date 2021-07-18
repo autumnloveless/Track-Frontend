@@ -40,7 +40,7 @@
         <Aside bind:filter={filter} accounts={accounts} bind:selectedAccounts={selectedAccounts}/>
         <div class="main-content scroll">
           {#if accounts && accounts.length > 0}
-            <Transactions filter={filter} selectedAccounts={selectedAccounts} accounts={accounts}/>
+            <Transactions selectedAccounts={selectedAccounts} accounts={accounts}/>
           {:else}
             <PlaidSetup/>
           {/if}
