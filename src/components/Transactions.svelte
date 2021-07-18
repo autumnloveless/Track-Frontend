@@ -136,8 +136,8 @@
         <div class="p-3">
           <nav class="pagination is-small" role="navigation" aria-label="pagination">
             <div class="px-2">{((unreadPageNum - 1) * unreadPageSize)+1}-{(unreadPageNum*unreadPageSize)} of {filteredUnreadTransactions.length}</div>
-            <button on:click={() => unreadPageNum -= 1} class="pagination-previous"><Fa icon={faArrowLeft} /></button>
-            <button on:click={() => unreadPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
+            <button on:click|stopPropagation={() => unreadPageNum -= 1} class="pagination-previous"><Fa icon={faArrowLeft} /></button>
+            <button on:click|stopPropagation={() => unreadPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
           </nav>
         </div>
       {/if}
