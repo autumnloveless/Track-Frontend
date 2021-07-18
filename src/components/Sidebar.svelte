@@ -19,7 +19,7 @@
 
     <p class="pointer menu-label is-hidden-mobile is-flex is-align-items-center" style="margin-top: 3em" on:click={() => open = !open}>
       <input type="checkbox" on:click|stopPropagation={selectAccount} checked={selectedAccounts.length > 0}>
-      <span class="mx-3">Accounts ({selectedAccounts.length})</span>
+      <span class="mx-3">Accounts ({ selectedAccounts.length > 0 ? selectedAccounts.length : accounts.length })</span>
       {#if open}
         <span class=""><Fa icon={faAngleUp}/></span>
       {:else}
@@ -39,6 +39,6 @@
 
 <style type="text/scss">
   .sidebar {
-    max-width: 20vw;
+    max-width: 15vw;
   }
 </style>
