@@ -39,6 +39,6 @@
 
 <style type="text/scss">
   .sidebar {
-    max-width: 15vw;
+    width: 200px;
   }
 </style>

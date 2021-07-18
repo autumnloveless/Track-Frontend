@@ -77,7 +77,7 @@
       <div>{ transaction.merchantName || transaction.name}</div>
     </div>
   </td>
-  <td class="has-text-right date is-hidden-mobile">
+  <td class="has-text-right date is-hidden-mobile is-narrow">
     { 
       isToday(date) 
       ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
