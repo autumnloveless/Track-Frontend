@@ -28,7 +28,7 @@
 
   <div id="navMenu" class:is-active="{menuVisible}" class="navbar-menu">
     <div class="navbar-start">
-      <!-- <a class="navbar-item" href="/#/app">App</a> -->
+      <a class="navbar-item" href="/#/app">App</a>
     </div>
 
     <div class="navbar-end">
@@ -36,7 +36,7 @@
       <div class="navbar-item">
         <div class="buttons">
           {#if $user.id == undefined}
-            <!-- <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a> -->
+            <a class="button is-primary" href="/#/signup"><strong>Sign up</strong></a>
             <a class="button is-light" href="/#/login">Log in</a>
           {:else}
             <button class="button is-light" on:click={logout}>Logout</button>

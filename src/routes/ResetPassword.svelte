@@ -14,7 +14,6 @@
 
   onMount(async () => {
     let { user } = await checkAuth();
-    console.log("Checking Auth:", user)
     if(user && user.id){ replace('/app') }
   })
 

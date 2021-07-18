@@ -1,5 +1,6 @@
 <script>
   import api from '../services/apiService.js';
+  import { get } from 'svelte/store';
   import Fa from 'svelte-fa'
   import { faRedoAlt, faFilter } from '@fortawesome/free-solid-svg-icons'
   import TransactionRow from './TransactionRow.svelte';
@@ -8,7 +9,9 @@
   import Unread from '../components/Unread.svelte';
   import { onMount, onDestroy } from 'svelte';
   import { selectedTransactions } from '../store.js';
+  import {querystring} from 'svelte-spa-router'
   import collapse from 'svelte-collapse'
+  let searchParams, limit, page;
   let unreadOpen = true, readOpen = true, filterOpen = false;
   let loading = true, refresh = false;
   let selected = [], selectedUnread = false;
@@ -28,12 +31,17 @@
   }
   
   let transactions=[],unreadTransactions=[],readTransactions=[];
-  onMount(async () => await getTransactions())
+  onMount(async () => {
+    searchParams = new URLSearchParams(get(querystring));
+    limit = searchParams.get("limit") || 10;
+    page = searchParams.get("page") || 1;
+    await getTransactions(limit,page);
+  })
 
-  const getTransactions = async (isRefresh = false) => {
+  const getTransactions = async (_limit, _page, isRefresh = false) => {
     if (isRefresh) { rotateButton() }
     else { loading = true; }
-    transactions = await api.getTransactions();
+    transactions = await api.getTransactions(_limit,((_page-1) * _limit));
     unreadTransactions = [];
     readTransactions = [];
     transactions.forEach(transaction => {
@@ -56,7 +64,7 @@
       ids: selected.map(s => s.id),
       update: { read: isRead }
     })
-    await getTransactions(true);
+    await getTransactions(limit,page,true);
   }
 
   const handleMultiselectButton = async (event) => {
@@ -91,7 +99,7 @@
 {:else}
   <div class="mb-2 is-flex is-align-items-center" >
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
-    <span on:click={() => getTransactions(true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
+    <span on:click={() => getTransactions(limit,page,true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
