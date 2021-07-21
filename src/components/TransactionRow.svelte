@@ -80,21 +80,22 @@
   <td class="is-hidden-mobile">
     { transaction.merchantName || transaction.name}
   </td>
-  <td class="is-hidden-tablet">
-    <div class="is-flex is-flex-direction-column">
-      <div class:green="{transaction.amount < 0}" class="bold">${transaction.amount.toFixed(2)}</div>
-      <div>{ transaction.merchantName || transaction.name}</div>
-    </div>
-  </td>
-  <td class="is-narrow">
+  <td class="is-narrow is-hidden-mobile">
     {#if transaction.pending}
       <span class="pending-icon">PENDING</span>
     {/if}
   </td>
   <td class="has-text-right date is-hidden-mobile is-narrow">{ displayDate(new Date(transaction.date)) }</td>
-  <td class="is-narrow has-text-right date is-hidden-tablet">
-    <div class="is-flex is-flex-direction-column is-align-items-space-between">
-      <div>{ displayDate(new Date(transaction.date)) }</div>
+  <td class="has-text-right date is-hidden-tablet is-flex is-flex-direction-column">
+    <div class="is-flex is-justify-content-space-between">
+      <div class:green="{transaction.amount < 0}" class="bold">${transaction.amount.toFixed(2)}</div>
+      <div>
+        {#if transaction.pending}<span class="pending-icon mx-2">PENDING</span>{/if}
+        <span>{ displayDate(new Date(transaction.date)) }</span>
+      </div>
+    </div>
+    <div class="is-flex is-justify-content-space-between">
+      <div class="has-text-left">{ transaction.merchantName || transaction.name}</div>
       <div on:click={toggleStar}><Starred starred={transaction.starred} /></div>
     </div>
   </td>
