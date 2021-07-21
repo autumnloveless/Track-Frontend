@@ -10,7 +10,7 @@
   import { push, pop,replace } from 'svelte-spa-router'
   import {onMount} from 'svelte'
   import {checkAuth} from '../services/authService.js';
-  let passModalActive = false, userModalActive = false;
+  let passModalActive = false, userModalActive = false, updateLoading = false;
   let user;
   onMount(async () => {
     ({ user } = await checkAuth());
@@ -18,7 +18,8 @@
   })
 
   const updateTransactions = async () => {
-    let result = await api.updateTransactions();
+    updateLoading = true;
+    let result = await api.updateTransactions().catch(e => console.log("Error", e));
     if (result.success){
       toast.push('Transactions refreshed succesfully');
     } else {
@@ -27,6 +28,7 @@
         '--toastProgressBackground': '#C53030'
       }});
     }
+    updateLoading = false;
   }
 
   const deleteAccount = () => {
@@ -70,7 +72,7 @@
         <div class="is-flex is-flex-direction-row is-justify-content-center is-flex-wrap-wrap">
           <div class="is-flex is-flex-direction-column is-align-items-center px-2">
             <button class="button is-success is-light m-2 w-100" on:click={api.linkBankAccount}>Add Bank Account</button>
-            <button class="button is-info is-light m-2 w-100" on:click={updateTransactions}>Refresh Transactions</button>
+            <button class="button is-info is-light m-2 w-100" class:is-loading="{updateLoading}" on:click={updateTransactions}>Refresh Transactions</button>
             <button class="button is-danger is-light m-2 w-100 " on:click={deleteAccount}>Delete Account</button>
           </div>
           <div class="is-flex is-flex-direction-column is-align-items-center px-2">
