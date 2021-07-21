@@ -6,7 +6,6 @@
 
   $: updateChekbox(group)
 	$: updateGroup(checked)
-  $: date = new Date(transaction.authorizedDate || transaction.date);
   let value = { id: transaction.id, read: transaction.read }
 	
 	function updateChekbox(group) {
@@ -64,6 +63,14 @@
     return checkDate.getFullYear() === today.getFullYear();
   }
 
+  const displayDate = (date) => {
+    return isToday(date) 
+      ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
+      : isThisYear(date)
+      ? date.toLocaleString("en", { month: 'short', day: 'numeric' })
+      : date.toLocaleString("en", { year: '2-digit', month: 'short', day: 'numeric' })
+  }
+
 </script>
 
 <tr class:is_read="{transaction.read}" class="row" on:click={openItem}>
@@ -84,29 +91,11 @@
       <span class="pending-icon">PENDING</span>
     {/if}
   </td>
-  <td class="has-text-right date is-hidden-mobile is-narrow">
-    { 
-      isToday(date) 
-      ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
-      : isThisYear(date)
-      ? date.toLocaleString("en", { month: 'short', day: 'numeric' })
-      : date.toLocaleString("en", { year: '2-digit', month: 'short', day: 'numeric' })
-    }
-  </td>
+  <td class="has-text-right date is-hidden-mobile is-narrow">{ displayDate(new Date(transaction.date)) }</td>
   <td class="is-narrow has-text-right date is-hidden-tablet">
     <div class="is-flex is-flex-direction-column is-align-items-space-between">
-      <div>
-        { 
-          isToday(date) 
-          ? date.toLocaleString("en", { hour: 'numeric', minute: 'numeric' })
-          : isThisYear(date)
-          ? date.toLocaleString("en", { month: 'short', day: 'numeric' })
-          : date.toLocaleString("en", { year: '2-digit', month: 'short', day: 'numeric' })
-        }
-      </div>
-      <div on:click={toggleStar}>
-        <Starred starred={transaction.starred} />
-      </div>
+      <div>{ displayDate(new Date(transaction.date)) }</div>
+      <div on:click={toggleStar}><Starred starred={transaction.starred} /></div>
     </div>
   </td>
 </tr>

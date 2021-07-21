@@ -44,19 +44,22 @@
       <div class="card">
         <div class="card-header capitalize">
           <p class="card-header-icon light-grey-bg" on:click={pop}><Fa icon={faAngleLeft}/></p>
-          <p class="card-header-title">{transaction.merchantName || transaction.name}</p>
+          <p class="card-header-title">{transaction.merchantName || transaction.name} - ${transaction.amount.toFixed(2)}</p>
           <p class="card-header-icon" on:click={markUnread}><Unread read={transaction.read} /></p>
           <p class="card-header-icon" on:click={toggleStar}><Starred starred={transaction.starred} /></p>
         </div>
         <div class="card-content">
-          <p>${transaction.amount.toFixed(2)}</p>
-          <p>{transaction.merchantName || transaction.name}</p>
-          <p>{new Date(transaction.date).toLocaleString()}</p>
-          <p>Pending: {transaction.pending}</p>
-          <p>Category: {transaction.category}</p>
-          <p>Payment Channel: {transaction.paymentChannel}</p>
-          <p>Type: {transaction.transactionType}</p>
-          <p>Location: {transaction.locationId}</p>
+          <p><b>Amount</b>: ${transaction.amount.toFixed(2)}</p>
+          {#if transaction.merchantName}<p><b>Merchant</b>: {transaction.merchantName}</p>{/if}
+          <p><b>Name</b>: {transaction.name}</p>
+          <p><b>Date</b>: {new Date(transaction.date).toLocaleString("en", { year: 'numeric', month: 'short', day: 'numeric',hour: 'numeric', minute: 'numeric' })}</p>
+          <p><b>Authorized Date</b>: {new Date(transaction.authorizedDate).toLocaleString("en", { year: 'numeric', month: 'short', day: 'numeric',hour: 'numeric', minute: 'numeric' })}</p>
+          <p><b>Pending</b>: {transaction.pending}</p>
+          <p><b>Category</b>: {transaction.category}</p>
+          <p><b>Payment Channel</b>: {transaction.paymentChannel}</p>
+          <p><b>Type</b>: {transaction.transactionType}</p>
+          <p><b>Account</b>: {transaction.PlaidAccount?.name}</p>
+          <p><b>Location</b>: {transaction.locationId}</p>
         </div>
       </div>
     </div> 
