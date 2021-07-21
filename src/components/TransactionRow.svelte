@@ -80,6 +80,7 @@
   <td class="is-hidden-mobile">
     { transaction.merchantName || transaction.name}
   </td>
+  <td class="is-hidden-mobile is-hidden-touch is-narrow">{ transaction.PlaidAccount.name}</td>
   <td class="is-narrow is-hidden-mobile">
     {#if transaction.pending}
       <span class="pending-icon">PENDING</span>
