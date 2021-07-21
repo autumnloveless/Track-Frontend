@@ -6,7 +6,7 @@
 
   $: updateChekbox(group)
 	$: updateGroup(checked)
-  $: date = new Date(transaction.date);
+  $: date = new Date(transaction.authorizedDate || transaction.date);
   let value = { id: transaction.id, read: transaction.read }
 	
 	function updateChekbox(group) {
@@ -70,12 +70,19 @@
   <td class="is-narrow" on:click={checkItem}><input class="" type="checkbox" bind:checked={checked} on:click={checkItem} value={value}></td>
   <td class="is-narrow is-hidden-mobile" on:click={toggleStar}><Starred starred={transaction.starred} /></td>
   <td class:green="{transaction.amount < 0}" class="is-hidden-mobile has-text-right is-narrow currency">${transaction.amount.toFixed(2)}</td>
-  <td class="is-hidden-mobile">{ transaction.merchantName || transaction.name}</td>
+  <td class="is-hidden-mobile">
+    { transaction.merchantName || transaction.name}
+  </td>
   <td class="is-hidden-tablet">
     <div class="is-flex is-flex-direction-column">
       <div class:green="{transaction.amount < 0}" class="bold">${transaction.amount.toFixed(2)}</div>
       <div>{ transaction.merchantName || transaction.name}</div>
     </div>
+  </td>
+  <td class="is-narrow">
+    {#if transaction.pending}
+      <span class="pending-icon">PENDING</span>
+    {/if}
   </td>
   <td class="has-text-right date is-hidden-mobile is-narrow">
     { 
@@ -105,5 +112,13 @@
 </tr>
 
 <style>
-
+  .pending-icon {
+    font-size: 12px;
+    font-weight: 500;
+    background: #6e94c3;
+    color: #fff;
+    padding: 1px 3px;
+    border-radius: 2px;
+    display: inline-flex;
+  }
 </style>
