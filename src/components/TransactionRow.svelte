@@ -115,7 +115,7 @@
   .pending-icon {
     font-size: 12px;
     font-weight: 500;
-    background: #6e94c3;
+    background: #5282bd;
     color: #fff;
     padding: 1px 3px;
     border-radius: 2px;
