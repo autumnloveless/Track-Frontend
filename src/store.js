@@ -5,4 +5,5 @@ export let user = writable({});
 export let error = writable();
 export let accessToken = writable();
 export let accounts = writable([]);
+export let userTags = writable([]);
 export let selectedTransactions = writable([]);

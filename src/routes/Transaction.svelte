@@ -1,5 +1,6 @@
 <script>
   export let params = {}
+  import { userTags } from "../store";
   import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   import Unread from '../components/Unread.svelte';
@@ -8,9 +9,23 @@
   import api from '../services/apiService.js';
   import { onMount } from 'svelte';
   import { push, pop } from 'svelte-spa-router'
+  import AutoComplete from "simple-svelte-autocomplete";
   let loading = true;
   let transaction = {};
   
+  // Tags autocomplete variables
+  let _userTags = [];
+  userTags.subscribe((u) => { _userTags = u })
+  let selectedTags = [];
+
+  const createTag = (newTag) => {
+    _userTags.unshift({id: null, name: newTag })
+    _userTags = _userTags;
+    userTags.set(_userTags)
+    console.log(_userTags);
+    return newTag
+  }
+
   onMount(async () => {
     let { user } = await checkAuth();
     if(!user || !user.id){
@@ -60,6 +75,18 @@
           <p><b>Type</b>: {transaction.transactionType}</p>
           <p><b>Account</b>: {transaction.PlaidAccount?.name}</p>
           <p><b>Location</b>: {transaction.locationId}</p>
+        </div>
+        <div class="card-footer" style="padding: 10px">
+          <span class="pr-3 pl-3">Tags</span>  
+          <AutoComplete
+              multiple=true
+              items={_userTags}
+              bind:selectedItem={selectedTags}
+              labelFieldName="name"
+              valueFieldName="id"
+              create={true}
+              createText={"Add new tag"}
+              onCreate={createTag} />
         </div>
       </div>
     </div> 

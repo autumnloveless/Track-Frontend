@@ -1,7 +1,9 @@
-import { user, accessToken } from "../store";
+import { user, accessToken, userTags } from "../store";
 import { checkAuth } from "./authService"
 
 let link_token = "";
+let _userTags = [];
+userTags.subscribe((u) => { _userTags = u })
 
 const getAccounts = async () => {
     let { accessToken, user} = await checkAuth();
@@ -11,6 +13,22 @@ const getAccounts = async () => {
     });
     response = await response.json();
     return response.accounts || [];
+}
+
+const getUserTags = async () => {
+    let { accessToken, user} = await checkAuth();
+    let response = await fetch(process.env.API_URL + 'api/tags', {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: { 'Authorization': 'Bearer ' + accessToken },
+    });
+    response = await response.json();
+    if(response.tags) {
+        _userTags = response.tags;
+        userTags.set(response.tags);
+    }
+    
+    console.log("user tags:", response)
+    return response.tags || [];
 }
 
 const getTransactions = async () => {
@@ -127,4 +145,4 @@ const updateUser = async (body) => {
 
 
 export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
-    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser }
+    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser, getUserTags }
