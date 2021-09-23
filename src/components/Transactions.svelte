@@ -19,6 +19,7 @@
   let filteredUnreadTransactions = [], paginatedUnreadTransactions = [];
   let filteredReadTransactions = [], paginatedReadTransactions = [];
   let selected = [], selectedUnread = false;
+  let searchTerm = "";
   let unsubscribe = selectedTransactions.subscribe((s) => { 
     selected = s;
   });
@@ -28,9 +29,9 @@
     selectedTransactions.set(selected)
     selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
   }
-  $: filteredReadTransactions = filter(readTransactions,selectedAccounts);
+  $: filteredReadTransactions = filter(readTransactions,selectedAccounts, searchTerm);
   $: paginatedReadTransactions = paginate(filteredReadTransactions,readPageSize,readPageNum);
-  $: filteredUnreadTransactions = filter(unreadTransactions,selectedAccounts);
+  $: filteredUnreadTransactions = filter(unreadTransactions,selectedAccounts, searchTerm);
   $: paginatedUnreadTransactions = paginate(filteredUnreadTransactions,unreadPageSize,unreadPageNum);
   
   onMount(async () => {
@@ -42,9 +43,21 @@
     return array.slice((page_number - 1) * page_size, page_number * page_size);
   }
 
-  const filter = (array,selectedAccounts) => {
-    if(selectedAccounts.length == 0) { return array; }
-    else { return array.filter(t => selectedAccounts.indexOf(t.accountId) != -1) }
+  const filter = (array,selectedAccounts, searchString) => {
+    if(selectedAccounts.length == 0 && searchString.length == 0) { return array; }
+    else { 
+      let filteredArr = array.filter(t => { 
+        let containsAllSearchTerms = true;
+        if(searchString.length > 0){
+          let searchArr = searchString.trim().toLowerCase().split(',');
+          let searchDomain = [t.amount.toFixed(2), t.category, t.transactionType, t.name, t.merchantName, t.PlaidAccount?.name].join(" ").toLowerCase();
+          if(t.pending) { searchDomain += " pending" }
+          containsAllSearchTerms = searchArr.reduce((total, term) => total && (searchDomain.indexOf(term) > -1), true)
+        }
+        return (selectedAccounts.indexOf(t.accountId) != -1 || selectedAccounts.length == 0) && containsAllSearchTerms
+      })
+      return filteredArr;
+    }
   }
 
   const getTransactions = async (isRefresh = false) => {
@@ -113,6 +126,7 @@
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
     <span class="inline-block mx-3 pointer is-hidden-tablet" on:click={() => filterOpen = !filterOpen}><Fa icon={faFilter} /></span>
+    <input class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas" bind:value={searchTerm}>
   </div>
   <div class="is-hidden-tablet filter-mobile" use:collapse={{open: filterOpen, duration: 0.6}}>
     <ul class="">
