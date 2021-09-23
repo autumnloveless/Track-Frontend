@@ -63,9 +63,7 @@
             t.name,
             t.merchantName,
             t.PlaidAccount?.name,
-            new Date(t.date).toLocaleString("en", { year: 'numeric', month: 'short', day: 'numeric',hour: 'numeric', minute: 'numeric' }),
-            new Date(t.date).toLocaleString("en", { year: 'numeric', month: 'long', day: 'numeric',hour: 'numeric', minute: 'numeric' }),
-            new Date(t.date).toLocaleString('en-US')
+            t.date
           ].join(" ").toLowerCase();
           if(t.pending) { searchDomain += " pending" }
           if(t.starred) { searchDomain += " starred" }
