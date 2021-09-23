@@ -127,7 +127,7 @@
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
     <span class="inline-block mx-3 pointer is-hidden-tablet" on:click={() => filterOpen = !filterOpen}><Fa icon={faFilter} /></span>
-    <input class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas" bind:value={searchTerm}>
+    <input class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
   </div>
   <div class="is-hidden-tablet filter-mobile" use:collapse={{open: filterOpen, duration: 0.6}}>
     <ul class="">
