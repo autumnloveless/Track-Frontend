@@ -2,6 +2,8 @@
   import Starred from './Starred.svelte';
   import {push} from 'svelte-spa-router'
   import api from '../services/apiService.js';
+  import { createEventDispatcher } from 'svelte';
+  const dispatch = createEventDispatcher();
   export let transaction, group, checked;
 
   $: updateChekbox(group)
@@ -30,7 +32,7 @@
   const toggleStar = async (e) => {
     e.stopPropagation();
     let result = await api.updateTransaction(transaction.id, { starred: !transaction.starred });
-    if (result && !result.error) { transaction = result }
+    if (result && !result.error) { transaction = result; dispatch('update', transaction); }
     else { console.log(result.error) }
   }
 

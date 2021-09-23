@@ -7,3 +7,4 @@ export let accessToken = writable();
 export let accounts = writable([]);
 export let userTags = writable([]);
 export let selectedTransactions = writable([]);
+export let filterString = writable('');

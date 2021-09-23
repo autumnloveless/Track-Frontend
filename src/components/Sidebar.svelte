@@ -1,8 +1,9 @@
 <script>
-  export let filter,accounts,selectedAccounts = [];
+  export let accounts,selectedAccounts = [];
   import collapse from 'svelte-collapse'
   import { faAngleDown, faAngleUp } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
+  import { filterString } from '../store.js'
   let open = true;
   const selectAccount = () => {
     selectedAccounts = selectedAccounts.length > 0 ? [] : accounts.map(a => a.accountId);
@@ -13,8 +14,8 @@
   <div class="">
     <p class="menu-label is-hidden-mobile">Inbox</p>
     <ul class="menu-list">
-      <li><button type="button" class="button-link" on:click={() => filter = "all"}>All</button></li>
-      <li><button type="button" class="button-link" on:click={() => filter = "starred"}>Starred</button></li>
+      <li><button type="button" class="button-link" on:click={() => filterString.set("")}>All</button></li>
+      <li><button type="button" class="button-link" on:click={() => filterString.set("starred")}>Starred</button></li>
     </ul>
 
     <p class="pointer menu-label is-hidden-mobile is-flex is-align-items-center" style="margin-top: 3em" on:click={() => open = !open}>

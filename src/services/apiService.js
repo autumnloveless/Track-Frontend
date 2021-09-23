@@ -27,7 +27,6 @@ const getUserTags = async () => {
         userTags.set(response.tags);
     }
     
-    console.log("user tags:", response)
     return response.tags || [];
 }
 

@@ -8,7 +8,7 @@
   import CollapseIcon from './CollapseIcon.svelte';
   import Unread from '../components/Unread.svelte';
   import { onMount, onDestroy } from 'svelte';
-  import { selectedTransactions } from '../store.js';
+  import { selectedTransactions, filterString } from '../store.js';
   import {querystring} from 'svelte-spa-router'
   import collapse from 'svelte-collapse'
   export let selectedAccounts, accounts =[];
@@ -20,10 +20,16 @@
   let filteredReadTransactions = [], paginatedReadTransactions = [];
   let selected = [], selectedUnread = false;
   let searchTerm = "";
-  let unsubscribe = selectedTransactions.subscribe((s) => { 
+  let unsubscribeSelectedTransactions = selectedTransactions.subscribe((s) => { 
     selected = s;
   });
-  onDestroy(() => unsubscribe())
+  let unsubscribeFilterString = filterString.subscribe((s) => { 
+    searchTerm = s;
+  });
+  onDestroy(() => { 
+    unsubscribeSelectedTransactions();
+    unsubscribeFilterString();
+  })
 
   $: { 
     selectedTransactions.set(selected)
@@ -50,7 +56,17 @@
         let containsAllSearchTerms = true;
         if(searchString.length > 0){
           let searchArr = searchString.trim().toLowerCase().split(',');
-          let searchDomain = [t.amount.toFixed(2), t.category, t.transactionType, t.name, t.merchantName, t.PlaidAccount?.name].join(" ").toLowerCase();
+          let searchDomain = [
+            t.amount.toFixed(2),
+            t.category,
+            t.transactionType,
+            t.name,
+            t.merchantName,
+            t.PlaidAccount?.name,
+            new Date(t.date).toLocaleString("en", { year: 'numeric', month: 'short', day: 'numeric',hour: 'numeric', minute: 'numeric' }),
+            new Date(t.date).toLocaleString("en", { year: 'numeric', month: 'long', day: 'numeric',hour: 'numeric', minute: 'numeric' }),
+            new Date(t.date).toLocaleString('en-US')
+          ].join(" ").toLowerCase();
           if(t.pending) { searchDomain += " pending" }
           if(t.starred) { searchDomain += " starred" }
           containsAllSearchTerms = searchArr.reduce((total, term) => total && (searchDomain.indexOf(term.trim()) > -1), true)
@@ -75,6 +91,11 @@
       }
     });
     loading = false;
+  }
+
+  const updateTransaction = (event) => {
+    unreadTransactions.filter(t => t.id == event.detail.id).forEach(t => t.starred = event.detail.starred);
+    readTransactions.filter(t => t.id == event.detail.id).forEach(t => t.starred = event.detail.starred);
   }
 
   const rotateButton = () => {
@@ -127,8 +148,9 @@
       <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
     <span class="inline-block mx-3 pointer is-hidden-tablet" on:click={() => filterOpen = !filterOpen}><Fa icon={faFilter} /></span>
-    <input class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
+    <input id="searchbar" class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
   </div>
+  <input id="searchbar" class="input is-hidden-tablet my-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
   <div class="is-hidden-tablet filter-mobile" use:collapse={{open: filterOpen, duration: 0.6}}>
     <ul class="">
       {#each accounts as account, i}
@@ -147,7 +169,7 @@
     <div class="card-header thin-border-bottom" on:click={() => unreadOpen = !unreadOpen}>
       <CollapseIcon open={unreadOpen} />     
       <p class="card-header-title">Unread ({ filteredUnreadTransactions.length })</p>
-      {#if filteredUnreadTransactions.length > unreadPageSize }
+      <!-- {#if filteredUnreadTransactions.length > unreadPageSize } -->
         <div class="p-3">
           <nav class="pagination is-small" role="navigation" aria-label="pagination">
             <div class="px-2">{((unreadPageNum - 1) * unreadPageSize)+1}-{(unreadPageNum*unreadPageSize)} of {filteredUnreadTransactions.length}</div>
@@ -155,13 +177,13 @@
             <button on:click|stopPropagation={() => unreadPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
           </nav>
         </div>
-      {/if}
+      <!-- {/if} -->
     </div>
     <div class="card-content p-0" use:collapse={{open: unreadOpen, duration: 0.6}}>
       <table class="table is-hoverable">
         <tbody>
           {#each paginatedUnreadTransactions as transaction (transaction.id)}
-            <TransactionRow transaction={transaction} bind:group={selected} />
+            <TransactionRow transaction={transaction} bind:group={selected} on:update={updateTransaction} />
           {/each}
         </tbody>
       </table>
@@ -172,7 +194,7 @@
     <div class="card-header thin-border-bottom" on:click={() => readOpen = !readOpen}>
       <CollapseIcon open={readOpen} />
       <p class="card-header-title">Read</p>
-        {#if readTransactions.length > readPageSize}
+        <!-- {#if readTransactions.length > readPageSize} -->
           <div class="p-3">
             <nav class="pagination is-small" role="navigation" aria-label="pagination">
               <div class="px-2">{((readPageNum - 1) * readPageSize)+1}-{(readPageNum*readPageSize)} of {filteredReadTransactions.length}</div>
@@ -180,14 +202,14 @@
               <button on:click|stopPropagation={() => readPageNum += 1} class="pagination-next"><Fa icon={faArrowRight} /></button>
             </nav>
           </div>
-        {/if}
+        <!-- {/if} -->
     </div>
     <div class="card-content p-0" use:collapse={{open: readOpen, duration: 0.6}}>
       <div class="table-container">
         <table class="table is-hoverable">
           <tbody>
             {#each paginatedReadTransactions as transaction (transaction.id)}
-              <TransactionRow transaction={transaction} bind:group={selected}/>
+              <TransactionRow transaction={transaction} bind:group={selected} on:update={updateTransaction}/>
             {/each}
           </tbody>
         </table>

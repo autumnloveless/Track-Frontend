@@ -20,7 +20,6 @@
     }
   })
 
-  let filter = "all"
   let selectedAccounts = [];
 
 </script>
@@ -37,10 +36,10 @@
       </div>
     {:then accounts}
       <section class="main-content-container">
-        <Aside bind:filter={filter} accounts={accounts} bind:selectedAccounts={selectedAccounts}/>
+        <Aside accounts={accounts} bind:selectedAccounts={selectedAccounts}/>
         <div class="main-content scroll">
           {#if accounts && accounts.length > 0}
-            <Transactions selectedAccounts={selectedAccounts} accounts={accounts}/>
+            <Transactions selectedAccounts={selectedAccounts} accounts={accounts} />
           {:else}
             <PlaidSetup/>
           {/if}

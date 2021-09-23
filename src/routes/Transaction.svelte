@@ -76,7 +76,7 @@
           <p><b>Account</b>: {transaction.PlaidAccount?.name}</p>
           <p><b>Location</b>: {transaction.locationId}</p>
         </div>
-        <div class="card-footer" style="padding: 10px">
+        <!-- <div class="card-footer" style="padding: 10px">
           <span class="pr-3 pl-3">Tags</span>  
           <AutoComplete
               multiple=true
@@ -87,7 +87,7 @@
               create={true}
               createText={"Add new tag"}
               onCreate={createTag} />
-        </div>
+        </div> -->
       </div>
     </div> 
   </section>
