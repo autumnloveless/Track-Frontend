@@ -52,7 +52,8 @@
           let searchArr = searchString.trim().toLowerCase().split(',');
           let searchDomain = [t.amount.toFixed(2), t.category, t.transactionType, t.name, t.merchantName, t.PlaidAccount?.name].join(" ").toLowerCase();
           if(t.pending) { searchDomain += " pending" }
-          containsAllSearchTerms = searchArr.reduce((total, term) => total && (searchDomain.indexOf(term) > -1), true)
+          if(t.starred) { searchDomain += " starred" }
+          containsAllSearchTerms = searchArr.reduce((total, term) => total && (searchDomain.indexOf(term.trim()) > -1), true)
         }
         return (selectedAccounts.indexOf(t.accountId) != -1 || selectedAccounts.length == 0) && containsAllSearchTerms
       })
