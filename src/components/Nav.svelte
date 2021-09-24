@@ -1,13 +1,11 @@
 <script>
   import { logout, checkAuth } from '../services/authService.js'
-  import api from '../services/apiService.js'
   import { onMount } from 'svelte';
   import { user } from '../store.js'
 
   let menuVisible = false;
   onMount( async () => {
     checkAuth();
-    api.getUserTags();
   })
 
   const toggleMenu = () => {

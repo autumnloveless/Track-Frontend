@@ -1,9 +1,6 @@
-import { user, accessToken, userTags } from "../store";
 import { checkAuth } from "./authService"
 
 let link_token = "";
-let _userTags = [];
-userTags.subscribe((u) => { _userTags = u })
 
 const getAccounts = async () => {
     let { accessToken, user} = await checkAuth();
@@ -129,5 +126,4 @@ const updateUser = async (body) => {
 
 
 export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
-    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser, getUserTags,
-    saveTransactionTags }
+    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser }

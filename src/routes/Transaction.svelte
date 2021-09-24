@@ -1,6 +1,5 @@
 <script>
   export let params = {}
-  import { userTags } from "../store";
   import { faAngleLeft, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   import Unread from '../components/Unread.svelte';
@@ -12,29 +11,21 @@
   let loading = true;
   let transaction = {};
   let edit = false;
-  let tagsString = ""
-  let editElement
+  let editElement;
+  let userTags = [];
 
-  // Tags autocomplete variables
-  let _userTags = [];
-  userTags.subscribe((u) => { _userTags = u })
+  $: userTags = transaction?.tags?.length > 0 ? transaction.tags.split(",") : [];
 
   const editTags = () => {
     edit = true;
     setTimeout(() => editElement.focus(), 50);
-    tagsString = _userTags.map(t => t.name).join(", ")
   }
 
   const saveTags = async () => {
     edit = false;
-    if(tagsString == ""){
-      userTags.set([])
-      await api.saveTransactionTags(params.id, [])
-    } else {
-      let tags = tagsString.split(",").map(t => ({'name':t}))
-      userTags.set(tags)
-      await api.saveTransactionTags(params.id, tags)
-    }
+    let result = await api.updateTransaction(transaction.id, { tags: transaction.tags });
+    if (result && !result.error) { transaction = result }
+    else { console.log(result.error) }
   }
 
   const keydown = (event) => {
@@ -97,7 +88,7 @@
           <span class="pr-3 pl-3">Tags: </span>  
           <div class="is-flex is-flex-grow-1" class:is-hidden={edit} on:click={editTags}>
             <div class="is-flex-grow-1">
-              {#each _userTags as tag}
+              {#each userTags as tag}
                 <span class="pending-icon mx-1">{tag}</span>
               {/each}
             </div>
@@ -106,7 +97,7 @@
             </span>
           </div>
           <p class="control has-icons-right w-100" class:is-hidden={!edit}>
-            <input bind:this={editElement} class="input" type="text" bind:value={tagsString} on:blur={saveTags} on:keydown={keydown}>
+            <input bind:this={editElement} class="input" type="text" bind:value={transaction.tags} on:blur={saveTags} on:keydown={keydown}>
             <span class="icon is-small is-right">
               <Fa icon={faCheck}/>
             </span>

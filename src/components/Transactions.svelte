@@ -63,7 +63,8 @@
             t.name,
             t.merchantName,
             t.PlaidAccount?.name,
-            t.date
+            t.date,
+            t.tags
           ].join(" ").toLowerCase();
           if(t.pending) { searchDomain += " pending" }
           if(t.starred) { searchDomain += " starred" }
