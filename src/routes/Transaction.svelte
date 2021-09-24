@@ -1,7 +1,7 @@
 <script>
   export let params = {}
   import { userTags } from "../store";
-  import { faAngleLeft } from '@fortawesome/free-solid-svg-icons'
+  import { faAngleLeft, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   import Unread from '../components/Unread.svelte';
   import Starred from '../components/Starred.svelte';
@@ -9,21 +9,38 @@
   import api from '../services/apiService.js';
   import { onMount } from 'svelte';
   import { push, pop } from 'svelte-spa-router'
-  import AutoComplete from "simple-svelte-autocomplete";
   let loading = true;
   let transaction = {};
-  
+  let edit = false;
+  let tagsString = ""
+  let editElement
+
   // Tags autocomplete variables
   let _userTags = [];
   userTags.subscribe((u) => { _userTags = u })
-  let selectedTags = [];
 
-  const createTag = (newTag) => {
-    _userTags.unshift({id: null, name: newTag })
-    _userTags = _userTags;
-    userTags.set(_userTags)
-    console.log(_userTags);
-    return newTag
+  const editTags = () => {
+    edit = true;
+    setTimeout(() => editElement.focus(), 50);
+    tagsString = _userTags.map(t => t.name).join(", ")
+  }
+
+  const saveTags = async () => {
+    edit = false;
+    if(tagsString == ""){
+      userTags.set([])
+      await api.saveTransactionTags(params.id, [])
+    } else {
+      let tags = tagsString.split(",").map(t => ({'name':t}))
+      userTags.set(tags)
+      await api.saveTransactionTags(params.id, tags)
+    }
+  }
+
+  const keydown = (event) => {
+    if(event.key == "Enter"){
+      edit = false;
+    }
   }
 
   onMount(async () => {
@@ -76,18 +93,25 @@
           <p><b>Account</b>: {transaction.PlaidAccount?.name}</p>
           <p><b>Location</b>: {transaction.locationId}</p>
         </div>
-        <!-- <div class="card-footer" style="padding: 10px">
-          <span class="pr-3 pl-3">Tags</span>  
-          <AutoComplete
-              multiple=true
-              items={_userTags}
-              bind:selectedItem={selectedTags}
-              labelFieldName="name"
-              valueFieldName="id"
-              create={true}
-              createText={"Add new tag"}
-              onCreate={createTag} />
-        </div> -->
+        <div class="card-footer is-align-items-center" style="padding: 10px">
+          <span class="pr-3 pl-3">Tags: </span>  
+          <div class="is-flex is-flex-grow-1" class:is-hidden={edit} on:click={editTags}>
+            <div class="is-flex-grow-1">
+              {#each _userTags as tag}
+                <span class="pending-icon mx-1">{tag}</span>
+              {/each}
+            </div>
+            <span class="is-flex-grow-0">
+              <Fa icon={faEdit}/>
+            </span>
+          </div>
+          <p class="control has-icons-right w-100" class:is-hidden={!edit}>
+            <input bind:this={editElement} class="input" type="text" bind:value={tagsString} on:blur={saveTags} on:keydown={keydown}>
+            <span class="icon is-small is-right">
+              <Fa icon={faCheck}/>
+            </span>
+          </p>
+        </div>
       </div>
     </div> 
   </section>
@@ -96,5 +120,13 @@
 {/if}
 
 <style>
-  
+  .pending-icon {
+    font-size: 12px;
+    font-weight: 500;
+    background: #5282bd;
+    color: #fff;
+    padding: 1px 3px;
+    border-radius: 2px;
+    display: inline-flex;
+  }
 </style>

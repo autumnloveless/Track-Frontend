@@ -15,21 +15,6 @@ const getAccounts = async () => {
     return response.accounts || [];
 }
 
-const getUserTags = async () => {
-    let { accessToken, user} = await checkAuth();
-    let response = await fetch(process.env.API_URL + 'api/tags', {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: { 'Authorization': 'Bearer ' + accessToken },
-    });
-    response = await response.json();
-    if(response.tags) {
-        _userTags = response.tags;
-        userTags.set(response.tags);
-    }
-    
-    return response.tags || [];
-}
-
 const getTransactions = async () => {
     let { accessToken, user} = await checkAuth();
     let response = await fetch(`${process.env.API_URL}api/transactions`, {
@@ -144,4 +129,5 @@ const updateUser = async (body) => {
 
 
 export default { getAccounts, getTransactions, linkBankAccount, updateTransactions,
-    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser, getUserTags }
+    updateTransaction,getTransaction, bulkUpdateTransactions,updateUser, getUserTags,
+    saveTransactionTags }
