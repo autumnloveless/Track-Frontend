@@ -1,6 +1,6 @@
 <script>
   export let params = {}
-  import { faAngleLeft, faCheck, faEdit } from '@fortawesome/free-solid-svg-icons'
+  import { faAngleLeft, faCheck, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons'
   import Fa from 'svelte-fa'
   import Unread from '../components/Unread.svelte';
   import Starred from '../components/Starred.svelte';
@@ -10,27 +10,52 @@
   import { push, pop } from 'svelte-spa-router'
   let loading = true;
   let transaction = {};
-  let edit = false;
-  let editElement;
+  let editTagsBool = false, editPhotosBool = false;
+  let editTagsElement;
   let userTags = [];
+  let transactionPhotos = [];
 
   $: userTags = transaction?.tags?.length > 0 ? transaction.tags.split(",") : [];
 
   const editTags = () => {
-    edit = true;
-    setTimeout(() => editElement.focus(), 50);
+    editTagsBool = true;
+    setTimeout(() => editTagsElement.focus(), 50);
   }
-
   const saveTags = async () => {
-    edit = false;
+    editTagsBool = false;
     let result = await api.updateTransaction(transaction.id, { tags: transaction.tags });
     if (result && !result.error) { transaction = result }
     else { console.log(result.error) }
   }
-
-  const keydown = (event) => {
+  const editTagsKeydown = (event) => {
     if(event.key == "Enter"){
-      edit = false;
+      editTagsBool = false;
+    }
+  }
+
+  const addPhoto = async () => {
+    editPhotosBool = true
+    transactionPhotos = [...transactionPhotos, '']
+    console.log(transactionPhotos)
+  }
+  const deletePhoto = (i) => {
+    transactionPhotos = transactionPhotos.filter((pic,index) => index != i)
+    if(transactionPhotos.length == 0){
+      editPhotos()
+    }
+  }
+  const editPhotos = async () => {
+    if(editPhotosBool) {
+      // save
+      editPhotosBool = false;
+      let result = await api.updateTransaction(transaction.id, { photoLinks: transactionPhotos.filter(p => p.length > 0).join("|") });
+      if (result && !result.error) { transaction = result }
+      else { 
+        console.log(result.error) 
+      }
+    } else {
+      // edit
+      editPhotosBool = true;
     }
   }
 
@@ -40,6 +65,7 @@
       push('/login')
     } else {
       transaction = await api.getTransaction(params.id);
+      transactionPhotos = transaction?.photoLinks?.length > 0 ? transaction.photoLinks.split("|").map(p => p.trim()) : [];
       loading = false;
     }
   })
@@ -83,10 +109,27 @@
           <p><b>Type</b>: {transaction.transactionType}</p>
           <p><b>Account</b>: {transaction.PlaidAccount?.name}</p>
           <p><b>Location</b>: {transaction.locationId}</p>
+          <div id="photos">
+            <button class="my-2 button is-info is-small" on:click={editPhotos} class:is-hidden={transactionPhotos.length == 0}>{ !editPhotosBool ? 'Edit Photos' : 'Save Photos' }</button>
+            <button class="my-2 button is-success is-small" on:click={addPhoto}>{ transactionPhotos.length > 0 ? 'Add Photo' : 'Attach Photo' }</button>
+            <div id="photo-container" class:is-hidden={editPhotosBool}>
+              {#each transactionPhotos as pic}
+                <img width="300px" class="mr-2 mb-2" src="{pic}" alt="">
+              {/each}
+            </div>
+            <div id="photo-edit-container is-flex is-flex-direction-column" class:is-hidden={!editPhotosBool}>
+              {#each transactionPhotos as pic, i}
+                <div class="is-flex is-align-items-center">
+                  <input bind:value={pic} class="input my-1" type="text">
+                  <button class="mx-2 px-2" on:click={() => deletePhoto(i)}><Fa icon={faTrash} /></button>
+                </div>
+              {/each}
+            </div>
+          </div>
         </div>
         <div class="card-footer is-align-items-center" style="padding: 10px">
           <span class="pr-3 pl-3">Tags: </span>  
-          <div class="is-flex is-flex-grow-1" class:is-hidden={edit} on:click={editTags}>
+          <div class="is-flex is-flex-grow-1" class:is-hidden={editTagsBool} on:click={editTags}>
             <div class="is-flex-grow-1">
               {#each userTags as tag}
                 <span class="pending-icon mx-1">{tag}</span>
@@ -96,8 +139,8 @@
               <Fa icon={faEdit}/>
             </span>
           </div>
-          <p class="control has-icons-right w-100" class:is-hidden={!edit}>
-            <input bind:this={editElement} class="input" type="text" bind:value={transaction.tags} on:blur={saveTags} on:keydown={keydown}>
+          <p class="control has-icons-right w-100" class:is-hidden={!editTagsBool}>
+            <input bind:this={editTagsElement} class="input" type="text" bind:value={transaction.tags} on:blur={saveTags} on:keydown={editTagsKeydown}>
             <span class="icon is-small is-right">
               <Fa icon={faCheck}/>
             </span>

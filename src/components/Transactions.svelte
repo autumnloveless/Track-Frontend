@@ -71,6 +71,8 @@
           ].join(" ").toLowerCase();
           if(t.pending) { searchDomain += " pending" }
           if(t.starred) { searchDomain += " starred" }
+          if(t.photoLinks?.length > 0) { searchDomain += " has:photos" }
+          if(t.tags?.length > 0) { searchDomain += " has:tags" }
           containsAllSearchTerms = searchArr.reduce((total, term) => total && (searchDomain.indexOf(term.trim()) > -1), true)
         }
         return (selectedAccounts.indexOf(t.accountId) != -1 || selectedAccounts.length == 0) && containsAllSearchTerms
