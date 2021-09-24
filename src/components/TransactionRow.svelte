@@ -8,7 +8,7 @@
 
   $: updateChekbox(group)
 	$: updateGroup(checked)
-  let value = { id: transaction.id, read: transaction.read }
+  let value = { id: transaction.id, read: transaction.read, amount: transaction.amount }
 	
 	function updateChekbox(group) {
 		checked = group.map(g => g.id).indexOf(value.id) >= 0

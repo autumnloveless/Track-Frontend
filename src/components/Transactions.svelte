@@ -19,6 +19,7 @@
   let filteredUnreadTransactions = [], paginatedUnreadTransactions = [];
   let filteredReadTransactions = [], paginatedReadTransactions = [];
   let selected = [], selectedUnread = false;
+  let selectedAmount = 0, hideSelectedAmount = false;
   let searchTerm = "";
   let unsubscribeSelectedTransactions = selectedTransactions.subscribe((s) => { 
     selected = s;
@@ -34,6 +35,8 @@
   $: { 
     selectedTransactions.set(selected)
     selectedUnread = selected.reduce((total, current) => ( total && !current.read ), true);
+    selectedAmount = selected.reduce((total, current) => total + current?.amount, 0);
+    hideSelectedAmount = selectedAmount == 0;
   }
   $: filteredReadTransactions = filter(readTransactions,selectedAccounts, searchTerm);
   $: paginatedReadTransactions = paginate(filteredReadTransactions,readPageSize,readPageNum);
@@ -113,22 +116,22 @@
   const handleMultiselectButton = async (event) => {
     switch(event.detail.option) {
       case "all":
-        selected = transactions.map(t => ({ id: t.id, read: t.read }))
+        selected = transactions.map(t => ({ id: t.id, read: t.read, amount: t.amount }))
         break;
       case "none":
         selected = []
         break;
       case "unread":
-        selected = transactions.filter(t => !t.read).map(t =>  ({ id: t.id, read: t.read }))
+        selected = transactions.filter(t => !t.read).map(t =>  ({ id: t.id, read: t.read, amount: t.amount }))
         break;
       case "read":
-        selected = transactions.filter(t => t.read).map(t => ({ id: t.id, read: t.read }))
+        selected = transactions.filter(t => t.read).map(t => ({ id: t.id, read: t.read, amount: t.amount }))
         break;
       default:
         if(selected.length > 0){
           selected = []
         } else {
-          selected = transactions.map(t => ({ id: t.id, read: t.read }))
+          selected = transactions.map(t => ({ id: t.id, read: t.read, amount: t.amount }))
         }
     }
   }
@@ -144,9 +147,10 @@
     <Multiselect selectedLength={selected.length} transactionsLength={transactions.length} on:multiselectButton={handleMultiselectButton} />
     <span on:click={() => getTransactions(true)} class="inline-block mx-3 pointer" class:rotate-720="{refresh}"><Fa icon={faRedoAlt} /></span>
     {#if selected.length > 0}
-      <div class="pl-5 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
+      <div class="mx-3 pointer" style="transform: scale(1.3)" on:click={() => updateManyRead(selectedUnread)}><Unread read={selectedUnread} /></div>
     {/if}
     <span class="inline-block mx-3 pointer is-hidden-tablet" on:click={() => filterOpen = !filterOpen}><Fa icon={faFilter} /></span>
+    <span class="mx-3" class:is-hidden={hideSelectedAmount}><b>${selectedAmount.toFixed(2)}</b></span>
     <input id="searchbar" class="input is-hidden-mobile mx-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
   </div>
   <input id="searchbar" class="input is-hidden-tablet my-3" type="text" placeholder="search here, separate terms with commas, eg: starred, fast food" bind:value={searchTerm}>
